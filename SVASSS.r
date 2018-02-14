@@ -37,8 +37,8 @@ require(vetsyn)
 setwd("I:\\ESS\\SVASyndromicSurveillanceSystem")
 
 
-source("r_files\\Functions_2.0.r",local=TRUE,encoding="native.enc")
-source("r_files\\Definitions_2.0.r",local=TRUE,encoding="native.enc")
+source("r_files\\Functions.r",local=TRUE,encoding="native.enc")
+source("r_files\\Definitions.r",local=TRUE,encoding="native.enc")
 
 
 
