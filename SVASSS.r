@@ -36,83 +36,27 @@ require(vetsyn)
 
 
 #rm(list=ls())
-setwd("I:\\ESS\\SVASyndromicSurveillanceSystem")
 
 
-source("r_files\\Functions.r",local=TRUE,encoding="native.enc")
-source("r_files\\Definitions.r",local=TRUE,encoding="native.enc")
+source("Functions.r",local=TRUE,encoding="native.enc")
+source("Definitions.r",local=TRUE,encoding="native.enc")
 
 
 
 # new data in ----
 
-current.SVA.data  <- read.csv("today.data.csv", as.is=TRUE, header=T, sep=";")
-current.CDB.data  <- read.csv("CDB.csv", as.is=TRUE, header=T, sep=";")
-current.SJV.data  <- read.csv2("classified_djursjukdata.csv")
+current.SVA.data  <- read.csv(paste0(wd.working,"\\today.data.csv"), as.is=TRUE, header=T, sep=";")
+  source("SVA.data_classification_fixes.r",local=TRUE,encoding="native.enc")
+  current.SVA.data <- current.SVA.data[which(current.SVA.data$active2==0),]
 
-PPN.database <- read.csv2("ppn_alla.csv", as.is=TRUE)
+current.CDB.data  <- read.csv(paste0(wd.working,"\\CDB.csv"), as.is=TRUE, header=T, sep=";")
+current.SJV.data  <- read.csv2(paste0(wd.working,"\\classified_djursjukdata.csv"))
+
+PPN.database <- read.csv2(paste0(wd.working,"\\ppn_alla.csv"), as.is=TRUE)
 PPN.database$X <- as.numeric(PPN.database$X)
 PPN.database$Y <- as.numeric(PPN.database$Y)
 
 
-
-#establishing a unique identification for animals and PPN, even if that information
-#is missing in a given submission
-DJURINDIVID = (current.data$DJURINDIVID+2)
-PPN = (current.data$PPN+2)
-
-DJURINDIVID[which(is.na(DJURINDIVID)==TRUE)]<- -1
-PPN[which(is.na(PPN)==TRUE)]<- -1
-
-d <- ave(DJURINDIVID,current.data$UPPDRAG,FUN=max,na.rm=TRUE)
-p <- ave(PPN,current.data$UPPDRAG,FUN=max,na.rm=TRUE)
-
-PPN_original=current.data$PPN
-current.data=cbind(current.data,PPN_original)
-
-current.data$DJURINDIVID[which(is.na(current.data$DJURINDIVID)==TRUE)]<- 
-                          abs(d[which(is.na(current.data$DJURINDIVID)==TRUE)])
-current.data$PPN[which(is.na(current.data$PPN)==TRUE)]<- 
-                          abs(p[which(is.na(current.data$PPN)==TRUE)])
-
-rm(DJURINDIVID, PPN, d, p, PPN_original)
-
-
-# polish classification ----
-# all fixes in the current data that are needed to adjust the syndromes from
-#  "raw classified data"
-
-
-
-current.data$SPECIES = as.vector(current.data$SPECIES)
-current.data$Species2 = as.vector(current.data$Species2)
-current.data$SPECIES [which(current.data$SPECIES=="?")] <- "Undefined"
-current.data$SPECIES [which(current.data$SPECIES=="Unknown")] <- "Undefined"
-current.data$SPECIES [which(current.data$SPECIES=="NONMAPPED")] <- "Undefined"
-
-current.data$SPECIES [which(current.data$SPECIES=="Ruminant")] <- current.data$Species2[which(current.data$SPECIES=="Ruminant")]
-current.data$SPECIES [which(current.data$SPECIES=="NONMAPPED")] <- "Cattle"
-current.data$SPECIES [which(current.data$SPECIES=="?")] <- "Cattle"
-current.data$SPECIES [which(current.data$SPECIES=="Canid/Felid")] <- current.data$Species2[which(current.data$SPECIES=="Canid/Felid")]
-current.data$SPECIES [which(current.data$SPECIES=="Wild Canid")] <- "Dog"
-current.data$SPECIES [which(current.data$SPECIES=="Wild Felid")] <- "Cat"
-current.data$SPECIES [which(current.data$SPECIES=="Wild Ruminant")] <- "VLT"
-
-
-
-    current.data$SYNDROMIC = as.vector(current.data$SYNDROMIC)
-    current.data$SYNDROMIC [which(current.data$SYNDROMIC=="Eyes-Ears")] <- "EEO"
-    current.data$SYNDROMIC [which(current.data$SYNDROMIC=="Oral Cavity")] <- "EEO"
-
-    current.data$SYNDROMIC [which(current.data$SYNDROMIC=="Circulatory")] <- "CHH"
-    current.data$SYNDROMIC [which(current.data$SYNDROMIC=="Haematopoietic")] <- "CHH"
-    current.data$SYNDROMIC [which(current.data$SYNDROMIC=="Hepatic")] <- "CHH"
-
-
-    
-    current.data <- current.data[which(current.data$active2==0),]
-    
-    
     
 # historical data in ----
     
@@ -146,9 +90,10 @@ current.data$SPECIES [which(current.data$SPECIES=="Wild Ruminant")] <- "VLT"
                          VLT=VLT.weekly)
 
 
-# define merging parameters    
-    new.data.start <- min(as.Date(current.data$ANKOMSTDATUM,format="%d/%m/%Y"))  
-    new.data.end   <- max(as.Date(current.data$ANKOMSTDATUM,format="%d/%m/%Y"))
+# define border between historical and new data ----
+    
+    new.data.start <- min(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))  
+    new.data.end   <- max(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))
     next.monday <- nextweekday(new.data.start,2)
     
     last.historical.row.5days <- (which(BOV.daily@dates[,1]==new.data.start)-1)
@@ -265,173 +210,5 @@ if (sum(status.true,na.rm=TRUE)==0&sum(status.scnd,na.rm=TRUE)==0)({
    sendmail(from, to, subject,msg, control=list(smtpServer="smtp1.sva.se"))
 })
 
-
-# index/main htmal ---- 
-
-
-setwd(wd.html)
-
-    html <- file("index.html", "w+")
-
-    cat("<html>\n", file=html)
-    cat("<head>\n", file=html)
-    cat(sprintf("<title>%s</title>\n", "SVASS"), file=html)
-    cat("</head>\n", file=html)
-
-    cat("<frameset cols=\"150px,*\">\n", file=html)
-    cat("<frame noresize=\"noresize\" src=\"nav.html\" name=\"nav\"/>\n", file=html)
-    cat("<frame noresize=\"noresize\" src=\"main.html\" name=\"main\"/>\n", file=html)
-    cat("</frameset>\n", file=html)
-
-    cat("</html>\n", file=html)
-
-    close(html)
-
-
-
-    html <- file("main.html", "w+")
-
-    cat("<html>\n", file=html)
-    cat("<head>\n", file=html)
-    cat(sprintf("<title>%s</title>\n", "SVASS main page"), file=html)
-    cat("</head>\n", file=html)
-
-    cat("<body>\n", file=html)
-
-    cat(sprintf('<h1 align="center">%s</h1>\n', "Syndromic surveillance at SVA"), file=html)
-    cat(sprintf('<h1 align="center">%s</h1>\n', Sys.Date()), file=html)
-    cat(sprintf('<h2 align="center">%s</h2>\n', "Select a group on the navigation menu to the left to see results"), file=html)
-    
-    cat("<TABLE border=\"0\" align=\"center\">\n", file=html)
-cat("<tr>\n", file=html)
-cat("<td>System outputs are based on data up to the end of the PREVIOUS day.</td>\n", file=html)
-cat("</tr>\n", file=html)
-
-cat("<tr>\n", file=html)
-cat("<td>Number of events per day correspond to the number of laboratory submissions, classified into syndromic groups by a computer system. </td>\n", file=html)
-cat("</tr>\n", file=html)
-
-cat("<tr>\n", file=html)
-cat("<td> They reflect the number of ANIMALS tested per day for CATS and DOGS, and the number of HERDS otherwise</td>\n", file=html)
-cat("</tr>\n", file=html)
-
-
-cat("<tr>\n", file=html)
-cat("<td>For questions contact Fernanda Dorea (fernanda.dorea@sva.se)</td>\n", file=html)
-cat("</tr>\n", file=html)
-
-
-cat("</table>  \n", file=html)
-  cat("</p>\n", file=html)
-
-    
-    
-    cat("<hr/>\n", file=html)
-
-#    cat("<p align=\"center\">\n", file=html)
-#    cat("<img src=\"summary.png\"/>\n", file=html)
-#    cat("</p>\n", file=html)
-#
-    cat("</body>\n", file=html)
-
-    cat("</html>\n", file=html)
-
-    close(html)
-
-
-
-
-
- html <- file('nav.html', "w+")
-
- cat("<html>\n", file=html)
-  cat("<head>\n", file=html)
-  cat(sprintf("<title>%s</title>\n", "SVASS menu"), file=html)
-  cat("</head>\n", file=html)
-
-  cat("<body>\n", file=html)
-
-  # Create navigation.
-  cat("<table border=0>\n", file=html)
-
-  cat("<tr>", file=html)
-  cat("<td colspan=3><a href=\"main.html\" target=\"main\">Main page</a></td>\n", file=html)
-  cat("</tr>\n", file=html)
-cat("<tr>", file=html)
-cat("<td colspan=3><a href=\"help.pdf\" target=\"main\">HELP</a></td>\n", file=html)
-cat("</tr>\n", file=html)
-
-
-  cat("<tr><td colspan=3>&nbsp;</td></tr>\n", file=html)
-
-  for(species in 1:length(species.acronyms)) {
-    cat("<tr>", file=html)
-
-    cat("<td>&nbsp;</td>", file=html)
-
-    if(sapply(true.alarms.daily,sum,na.rm=TRUE)[species]>0) {
-      cat("<td bgcolor='red'>", file=html)
-    } else {
-      if(sapply(scnd.alarms.daily,sum,na.rm=TRUE)[species]>0){
-        cat("<td bgcolor='yellow'>", file=html)
-      } else{
-        cat("<td bgcolor='springgreen'>", file=html)
-      }
-          }
-
-    cat("&nbsp;&nbsp;&nbsp;&nbsp;</td>", file=html)
-
-    cat(sprintf("<td><a href=\"%s.html\" target=\"main\">%s</a></td>", 
-                paste0("html/",species.acronyms[species]), species.names[species]), file=html)
-
-    cat("</tr>\n", file=html)
-    
-  }
-  
-  
-  
-  for(species in 1:length(species.acronyms)) {
-    cat("<tr>", file=html)
-    
-    cat("<td>&nbsp;</td>", file=html)
-  
-    
-    if(sapply(true.alarms.weekly,sum,na.rm=TRUE)[species]>0) {
-      cat("<td bgcolor='red'>", file=html)
-    } else {
-      if(sapply(scnd.alarms.weekly,sum,na.rm=TRUE)[species]>0){
-        cat("<td bgcolor='yellow'>", file=html)
-      } else{
-        cat("<td bgcolor='springgreen'>", file=html)
-      }
-    }
-    
-    cat("&nbsp;&nbsp;&nbsp;&nbsp;</td>", file=html)
-    
-    cat(sprintf("<td><a href=\"%s.html\" target=\"main\">%s</a></td>", 
-                paste0("html/",species.acronyms[species],"w"), 
-                paste0(species.names[species],"-WEEKLY")), file=html)
-    
-    cat("</tr>\n", file=html)
-    
-  }
-  
-  
-
-  cat("</table>\n\n", file=html)
-
-  cat("</body>\n", file=html)
-
-  cat("</html>\n", file=html)
-
-  close(html)
-  
-  
-  
-  
-  
-  
-  ####################################
-  
 
 
