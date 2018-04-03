@@ -1,4 +1,4 @@
-PlotDaily=1
+PlotDaily=0
 
 
 wd.reports <- "I:\\ESS\\SVASyndromicSurveillanceSystem\\regular_reports_PDF"

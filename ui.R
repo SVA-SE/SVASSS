@@ -14,11 +14,13 @@ shinyUI(navbarPage(
   "SVASSS",
   tabPanel("Syndromic Surveillance",
            sidebarPanel(
-              tags$h5("Species")
+              tags$h3("Choose Species"),
+              tags$h3("Daily/Weekly"),
+              tags$h3("Choose data sources")
            ),
            mainPanel(
              tabsetPanel(
-               tabPanel("Tab 1",
+               tabPanel("Alarms",
                         h4("Table"),
                         h1("Header 1"),
                         h2("Header 2"),
@@ -26,8 +28,9 @@ shinyUI(navbarPage(
                         h4("Header 4"),
                         h5("Header 5")
                ),
-               tabPanel("Tab 2", "This panel is intentionally left blank"),
-               tabPanel("Tab 3", "This panel is intentionally left blank")
+               tabPanel("Charts", "This panel is intentionally left blank"),
+               tabPanel("Maps", "This panel is intentionally left blank"),
+               tabPanel("Data", "This panel is intentionally left blank")
              )
            )
   ),

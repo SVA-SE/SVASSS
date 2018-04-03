@@ -46,7 +46,7 @@ source("r_files\\Definitions.r",local=TRUE,encoding="native.enc")
 
 # new data in ----
 
-current.data      <- read.csv("today.data.csv", as.is=TRUE, header=T, sep=";")
+current.SVA.data  <- read.csv("today.data.csv", as.is=TRUE, header=T, sep=";")
 current.CDB.data  <- read.csv("CDB.csv", as.is=TRUE, header=T, sep=";")
 current.SJV.data  <- read.csv2("classified_djursjukdata.csv")
 
