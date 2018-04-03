@@ -45,14 +45,14 @@ source("Definitions.r",local=TRUE,encoding="native.enc")
 
 # new data in ----
 
-current.SVA.data  <- read.csv(paste0(wd.working,"\\today.data.csv"), as.is=TRUE, header=T, sep=";")
+current.SVA.data  <- read.csv(paste0(wd.working,"/today.data.csv"), as.is=TRUE, header=T, sep=";")
   source("SVA.data_classification_fixes.r",local=TRUE,encoding="native.enc")
   current.SVA.data <- current.SVA.data[which(current.SVA.data$active2==0),]
 
-current.CDB.data  <- read.csv(paste0(wd.working,"\\CDB.csv"), as.is=TRUE, header=T, sep=";")
-current.SJV.data  <- read.csv2(paste0(wd.working,"\\classified_djursjukdata.csv"))
+current.CDB.data  <- read.csv(paste0(wd.working,"/CDB.csv"), as.is=TRUE, header=T, sep=";")
+current.SJV.data  <- read.csv2(paste0(wd.working,"/classified_djursjukdata.csv"))
 
-PPN.database <- read.csv2(paste0(wd.working,"\\ppn_alla.csv"), as.is=TRUE)
+PPN.database <- read.csv2(paste0(wd.working,"/ppn_alla.csv"), as.is=TRUE)
 PPN.database$X <- as.numeric(PPN.database$X)
 PPN.database$Y <- as.numeric(PPN.database$Y)
 
@@ -61,7 +61,7 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
 # historical data in ----
     
     for(species in species.acronyms){
-      eval(parse(text=paste0("load('history_files/",species,".RData')")))
+      eval(parse(text=paste0("load('",wd.working,"/history_files/",species,".RData')")))
     }
     
     daily.object <- list(CAT=CAT.daily,
@@ -127,32 +127,21 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
     
     
 # species loops ----
-    source("r_files\\BOV.r",local=TRUE,encoding="native.enc")
-    setwd(wd.working)
-    source("r_files\\AVI.r",local=TRUE,encoding="native.enc")
-    setwd(wd.working)
-    source("r_files\\CAT.r",local=TRUE,encoding="native.enc")
-    setwd(wd.working)
-    source("r_files\\EQU.r",local=TRUE,encoding="native.enc")
-    setwd(wd.working)
-    source("r_files\\DOG.r",local=TRUE,encoding="native.enc")
-    setwd(wd.working)
-    source("r_files\\SWI.r",local=TRUE,encoding="native.enc")
-    setwd(wd.working)
-    source("r_files\\SRU.r",local=TRUE,encoding="native.enc")
-    setwd(wd.working)
-    source("r_files\\VLT.r",local=TRUE,encoding="native.enc")
-    setwd(wd.working)
-    source("r_files\\ENV.r",local=TRUE,encoding="native.enc")
-    setwd(wd.working)
-    source("r_files\\FOD.r",local=TRUE,encoding="native.enc")
-    setwd(wd.working)
-    source("r_files\\FSK.r",local=TRUE,encoding="native.enc")
-    setwd(wd.working)
- 
+    source(paste0(wd.working,"/r_files/BOV.r"),local=TRUE,encoding="native.enc")
+    source(paste0(wd.working,"/r_files/AVI.r"),local=TRUE,encoding="native.enc")
+    source(paste0(wd.working,"/r_files/CAT.r"),local=TRUE,encoding="native.enc")
+    source(paste0(wd.working,"/r_files/EQU.r"),local=TRUE,encoding="native.enc")
+    source(paste0(wd.working,"/r_files/DOG.r"),local=TRUE,encoding="native.enc")
+    source(paste0(wd.working,"/r_files/SWI.r"),local=TRUE,encoding="native.enc")
+    source(paste0(wd.working,"/r_files/SRU.r"),local=TRUE,encoding="native.enc")
+    source(paste0(wd.working,"/r_files/VLT.r"),local=TRUE,encoding="native.enc")
+    source(paste0(wd.working,"/r_files/ENV.r"),local=TRUE,encoding="native.enc")
+    source(paste0(wd.working,"/r_files/FOD.r"),local=TRUE,encoding="native.enc")
+    source(paste0(wd.working,"/r_files/FSK.r"),local=TRUE,encoding="native.enc")
+    
        
 # saving data for apps ----
- load("svala.data.RData")
+ load(paste0(wd.working,"/svala.data.RData"))
  #svala.data.dates
  #current.data.dates
  #min.date.current
@@ -162,7 +151,7 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
   svala.data <- rbind(svala.data[keep.svala,],
                      current.data)
  svala.data.dates <- as.Date(svala.data$ANKOMSTDATUM, format = "%d/%m/%Y", origin="01/01/1970")
-  save(svala.data,svala.data.dates,file="svala.data.RData")
+  save(svala.data,svala.data.dates,file=paste0(wd.working,"/svala.data.RData"))
  
  
  
