@@ -1,14 +1,14 @@
 PlotDaily=0
 
 
-wd.reports <- "I:/ESS/SVASyndromicSurveillanceSystem/regular_reports_PDF"
-wd.alarm.reports <- "I:/ESS/SVASyndromicSurveillanceSystem/ALARM_reports_PDF"
-wd.files   <- "I:/ESS/SVASyndromicSurveillanceSystem/history_files"
-wd.working <- "I:/ESS/SVASyndromicSurveillanceSystem"
+#wd.reports <- "I:/ESS/SVASyndromicSurveillanceSystem/regular_reports_PDF"
+wd.alarm.reports <- "I:/ESS/SVASyndromicSurveillanceSystem/ALARM_reports_PDF/"
+wd.files   <- "I:/ESS/SVASyndromicSurveillanceSystem/history_files/"
+wd.working <- "I:/ESS/SVASyndromicSurveillanceSystem/"
 #wd.html <- "I:/ESS/SVASyndromicSurveillanceSystem/html"
-wd.html <- "Z:/SVASSS"
+#wd.html <- "Z:/SVASSS"
 #wd.html.figures <- "I:/ESS/SVASyndromicSurveillanceSystem/html/figures"
-wd.html.figures <- "Z:/SVASSS/figures"
+#wd.html.figures <- "Z:/SVASSS/figures"
 
 
 #labelling and naming ----
