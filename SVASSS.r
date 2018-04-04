@@ -45,12 +45,12 @@ source("Definitions.r",local=TRUE,encoding="native.enc")
 
 # new data in ----
 
-current.SVA.data  <- read.csv(paste0(wd.working,"/today.data.csv"), as.is=TRUE, header=T, sep=";")
+current.SVA.data  <- read.csv(paste0(wd.working,"/classified_data_SVA.csv"), as.is=TRUE, header=T, sep=";")
   source("SVA.data_classification_fixes.r",local=TRUE,encoding="native.enc")
   current.SVA.data <- current.SVA.data[which(current.SVA.data$active2==0),]
 
-current.CDB.data  <- read.csv(paste0(wd.working,"/CDB.csv"), as.is=TRUE, header=T, sep=";")
-current.SJV.data  <- read.csv2(paste0(wd.working,"/classified_djursjukdata.csv"))
+current.CDB.data  <- read.csv(paste0(wd.working,"/classified_data_CDB.csv"), as.is=TRUE, header=T, sep=";")
+current.SJV.data  <- read.csv2(paste0(wd.working,"/classified_data_SJV.csv"))
 
 PPN.database <- read.csv2(paste0(wd.working,"/ppn_alla.csv"), as.is=TRUE)
 PPN.database$X <- as.numeric(PPN.database$X)
