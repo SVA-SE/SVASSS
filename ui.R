@@ -8,18 +8,53 @@ require(shinythemes)
 
 library(shiny)
 
+source("Definitions.r",local=TRUE,encoding="native.enc")
+
 
 shinyUI(navbarPage(
   theme = shinythemes::shinytheme("united"),  
   "SVASSS",
+  
+  # tabpanel=Syndromic Surveillance ----
+  
   tabPanel("Syndromic Surveillance",
-           sidebarPanel(
-              tags$h3("Choose Species"),
-              tags$h3("Daily/Weekly"),
-              tags$h3("Choose data sources")
+           sidebarPanel(width=2,
+             
+                        #menu 1 ----
+              radioButtons("species", label = h3("Choose species"),
+                           choices = list(
+                             "Cats" = 1, 
+                             "Cattle" = 2, 
+                             "Dogs" = 3,
+                             "Environmental" = 4,
+                             "Feed" = 5,
+                             "Fish" = 6,
+                             "Horses" = 7,
+                             "Poultry" = 8,
+                             "Small Ruminants"= 9,
+                             "Swine" = 10,
+                             "Wildlife" = 11), 
+                           selected = 2)
            ),
+           
+           #menu 2 ----
+           sidebarPanel(width=2,
+                        selectInput("window", label = h3("Temporal window"), 
+                                    choices = list("DAILY" = 1, "WEEKLY" = 2), 
+                                    selected = 2),
+                        
+                        hr(),
+                        
+                        uiOutput("syndromes")
+                        
+           ),
+           
+           #TABS ----
+           
            mainPanel(
              tabsetPanel(
+               
+               #TAB 1----
                tabPanel("Alarms",
                         h4("Table"),
                         h1("Header 1"),
@@ -28,13 +63,24 @@ shinyUI(navbarPage(
                         h4("Header 4"),
                         h5("Header 5")
                ),
+               
+               #TAB 2----
                tabPanel("Charts", "This panel is intentionally left blank"),
+               
+               #TAB 3----
                tabPanel("Maps", "This panel is intentionally left blank"),
+               
+               #TAB 4----
                tabPanel("Data", "This panel is intentionally left blank")
              )
            )
   ),
+  
+  #Navbar 2----
   tabPanel("Navbar 2", "This panel is intentionally left blank"),
+  
+  
+  #Navbar 3----
   tabPanel("Navbar 3", "This panel is intentionally left blank")
 )
 )
