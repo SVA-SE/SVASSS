@@ -1,6 +1,14 @@
 
 # update syndromic ----
 
+          #why old dates as frames? fixed 20180516
+            # for (s in 1:11){
+            # for (c in 2:8){
+            # daily.object[[s]]@dates[,c] <- as.numeric(as.character(daily.object[[s]]@dates[,c]))
+            # }}
+
+
+
 daily.object[[sp.position]] <- update_syndromic(x=daily.object[[sp.position]],
                                                 id=list(UPPDRAG,PPN),
                                                 syndromes.var=SYNDROMIC,
@@ -108,6 +116,7 @@ for (ewma.loop in 1:2){
   }
   
   if(weekly){
+    if(!is.na(ewma.loop.synd.w[[ewma.loop]][1])){
     weekly.object[[sp.position]] <- ewma_synd(x=weekly.object[[sp.position]],
                                               syndromes=ewma.loop.synd.w[[ewma.loop]],
                                               evaluate.window=weekly.evaluate.window,
@@ -122,6 +131,7 @@ for (ewma.loop in 1:2){
                                               pre.process=FALSE,
                                               formula=list(y~x),
                                               frequency=52)
+    }
   }
 }
 
@@ -214,7 +224,7 @@ assign(paste0(sp.acron,".weekly"),weekly.object[[sp.position]])
 
 eval(parse(text=paste0("save(",paste0(sp.acron,'.daily,'),
                        paste0(sp.acron,'.weekly,'),"file='",
-                       paste0(wd.files,sp.acron,".RData'"),")")))
+                       paste0(wd.history,sp.acron,".RData'"),")")))
 
 
 
@@ -282,3 +292,57 @@ if (weekly&
   graphics.off()
 }
 
+
+
+# html page ----
+
+setwd(wd.html)
+syndromic_page(x=daily.object[[sp.position]],
+               tpoints.display=5,
+               syndromes=sp.all.syndromes[[sp.position]],
+               pretty.labels=sp.syndromes[[sp.position]][sp.all.syndromes[[sp.position]]],
+               window=300,
+               baseline=TRUE,
+               UCL=1,
+               algorithms=c(1,2),
+               limit=3,
+               file.name=sp.acron,
+               title=paste("Daily report of syndromes in",sp.label, (new.data.end),sep=" "),
+               data.page=TRUE,
+               data=CD.species,
+               date.format="%d/%m/%Y",
+               dates.var="ANKOMSTDATUM",
+               syndromes.var="SYNDROMIC",
+               color.null="F8F8FF",
+               color.low="F8FF2F",
+               color.alarm="FF0000",
+               scale=10, 
+               fill.colors=c("yellow2","orange","tomato"),
+               arrow.colors=c("green","orange","tomato","red"))
+
+if(weekly){
+  syndromic_page(x=weekly.object[[sp.position]],
+                 tpoints.display=5,
+                 syndromes=sp.all.syndromes[[sp.position]],
+                 pretty.labels=sp.syndromes[[sp.position]][sp.all.syndromes[[sp.position]]],
+                 window=60,
+                 baseline=TRUE,
+                 UCL=1,
+                 algorithms=c(1,2),
+                 limit=3,
+                 file.name=paste0(sp.acron,"w"),
+                 title=paste("Weekly report of syndromes in",sp.label, (new.data.end),sep=" "),
+                 data.page=FALSE,
+                 data=CD.cattle,
+                 date.format="%d/%m/%Y",
+                 dates.var="ANKOMSTDATUM",
+                 syndromes.var="SYNDROMIC",
+                 color.null="F8F8FF",
+                 color.low="F8FF2F",
+                 color.alarm="FF0000",
+                 scale=10, 
+                 fill.colors=c("yellow2","orange","tomato"),
+                 arrow.colors=c("green","orange","tomato","red"))
+}
+
+setwd(wd.running)
