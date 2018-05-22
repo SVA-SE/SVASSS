@@ -36,7 +36,8 @@ require(vetsyn)
 
 
 #rm(list=ls())
-
+wd.running     <- "I:/ESS/SVASSS2/SVASSS/"
+setwd(wd.running)
 
 source("Functions.r",local=TRUE,encoding="native.enc")
 source("Definitions.r",local=TRUE,encoding="native.enc")
@@ -49,8 +50,8 @@ current.SVA.data  <- read.csv(paste0(wd.sourcefiles,"classified_data_SVA.csv"), 
   source("SVA.data_classification_fixes.r",local=TRUE,encoding="native.enc")
   current.SVA.data <- current.SVA.data[which(current.SVA.data$active2==0),]
 
-current.CDB.data  <- read.csv(paste0(wd.sourcefiles,"classified_data_CDB.csv"), as.is=TRUE, header=T, sep=";")
-current.SJV.data  <- read.csv2(paste0(wd.sourcefiles,"classified_data_SJV.csv"))
+#current.CDB.data  <- read.csv(paste0(wd.sourcefiles,"classified_data_CDB.csv"), as.is=TRUE, header=T, sep=";")
+#current.SJV.data  <- read.csv2(paste0(wd.sourcefiles,"classified_data_SJV.csv"))
 
 PPN.database <- read.csv2(paste0(wd.sourcefiles,"ppn_alla.csv"), as.is=TRUE)
 PPN.database$X <- as.numeric(PPN.database$X)
@@ -61,7 +62,7 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
 # historical data in ----
     
     for(species in species.acronyms){
-      eval(parse(text=paste0("load('",wd.files,species,".RData')")))
+      eval(parse(text=paste0("load('",wd.history,species,".RData')")))
     }
     
     daily.object <- list(CAT=CAT.daily,
@@ -141,17 +142,17 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
     
        
 # saving data for apps ----
- load(paste0(wd.working,"svala.data.RData"))
+ load(paste0(wd.sourcefiles,"svala.data.RData"))
  #svala.data.dates
  #current.data.dates
  #min.date.current
  #max.data.current
  
- keep.svala <- which((svala.data.dates<min(as.Date(current.data$ANKOMSTDATUM,format="%d/%m/%Y")))&(svala.data.dates>(max(as.Date(current.data$ANKOMSTDATUM,format="%d/%m/%Y"))-550)))
+ keep.svala <- which((svala.data.dates<min(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y")))&(svala.data.dates>(max(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))-550)))
   svala.data <- rbind(svala.data[keep.svala,],
-                     current.data)
+                      current.SVA.data)
  svala.data.dates <- as.Date(svala.data$ANKOMSTDATUM, format = "%d/%m/%Y", origin="01/01/1970")
-  save(svala.data,svala.data.dates,file=paste0(wd.working,"/svala.data.RData"))
+  save(svala.data,svala.data.dates,file=paste0(wd.sourcefiles,"/svala.data.RData"))
  
  
  
@@ -198,6 +199,171 @@ if (sum(status.true,na.rm=TRUE)==0&sum(status.scnd,na.rm=TRUE)==0)({
   msg="No alarms today"
    sendmail(from, to, subject,msg, control=list(smtpServer="smtp1.sva.se"))
 })
+
+
+
+# index/main html ---- 
+
+
+setwd(wd.html)
+
+html <- file("index.html", "w+")
+
+cat("<html>\n", file=html)
+cat("<head>\n", file=html)
+cat(sprintf("<title>%s</title>\n", "SVASS"), file=html)
+cat("</head>\n", file=html)
+
+cat("<frameset cols=\"150px,*\">\n", file=html)
+cat("<frame noresize=\"noresize\" src=\"nav.html\" name=\"nav\"/>\n", file=html)
+cat("<frame noresize=\"noresize\" src=\"main.html\" name=\"main\"/>\n", file=html)
+cat("</frameset>\n", file=html)
+
+cat("</html>\n", file=html)
+
+close(html)
+
+
+
+html <- file("main.html", "w+")
+
+cat("<html>\n", file=html)
+cat("<head>\n", file=html)
+cat(sprintf("<title>%s</title>\n", "SVASS main page"), file=html)
+cat("</head>\n", file=html)
+
+cat("<body>\n", file=html)
+
+cat(sprintf('<h1 align="center">%s</h1>\n', "Syndromic surveillance at SVA"), file=html)
+cat(sprintf('<h1 align="center">%s</h1>\n', Sys.Date()), file=html)
+cat(sprintf('<h2 align="center">%s</h2>\n', "Select a group on the navigation menu to the left to see results"), file=html)
+
+cat("<TABLE border=\"0\" align=\"center\">\n", file=html)
+cat("<tr>\n", file=html)
+cat("<td>System outputs are based on data up to the end of the PREVIOUS day.</td>\n", file=html)
+cat("</tr>\n", file=html)
+
+cat("<tr>\n", file=html)
+cat("<td>Number of events per day correspond to the number of laboratory submissions, classified into syndromic groups by a computer system. </td>\n", file=html)
+cat("</tr>\n", file=html)
+
+cat("<tr>\n", file=html)
+cat("<td> They reflect the number of ANIMALS tested per day for CATS and DOGS, and the number of HERDS otherwise</td>\n", file=html)
+cat("</tr>\n", file=html)
+
+
+cat("<tr>\n", file=html)
+cat("<td>For questions contact Fernanda Dorea (fernanda.dorea@sva.se)</td>\n", file=html)
+cat("</tr>\n", file=html)
+
+
+cat("</table>  \n", file=html)
+cat("</p>\n", file=html)
+
+
+
+cat("<hr/>\n", file=html)
+
+#    cat("<p align=\"center\">\n", file=html)
+#    cat("<img src=\"summary.png\"/>\n", file=html)
+#    cat("</p>\n", file=html)
+#
+cat("</body>\n", file=html)
+
+cat("</html>\n", file=html)
+
+close(html)
+
+
+
+
+
+html <- file('nav.html', "w+")
+
+cat("<html>\n", file=html)
+cat("<head>\n", file=html)
+cat(sprintf("<title>%s</title>\n", "SVASS menu"), file=html)
+cat("</head>\n", file=html)
+
+cat("<body>\n", file=html)
+
+# Create navigation.
+cat("<table border=0>\n", file=html)
+
+cat("<tr>", file=html)
+cat("<td colspan=3><a href=\"main.html\" target=\"main\">Main page</a></td>\n", file=html)
+cat("</tr>\n", file=html)
+cat("<tr>", file=html)
+cat("<td colspan=3><a href=\"help.pdf\" target=\"main\">HELP</a></td>\n", file=html)
+cat("</tr>\n", file=html)
+
+
+cat("<tr><td colspan=3>&nbsp;</td></tr>\n", file=html)
+
+for(species in 1:length(species.acronyms)) {
+  cat("<tr>", file=html)
+  
+  cat("<td>&nbsp;</td>", file=html)
+  
+  if(sapply(true.alarms.daily,sum,na.rm=TRUE)[species]>0) {
+    cat("<td bgcolor='red'>", file=html)
+  } else {
+    if(sapply(scnd.alarms.daily,sum,na.rm=TRUE)[species]>0){
+      cat("<td bgcolor='yellow'>", file=html)
+    } else{
+      cat("<td bgcolor='springgreen'>", file=html)
+    }
+  }
+  
+  cat("&nbsp;&nbsp;&nbsp;&nbsp;</td>", file=html)
+  
+  cat(sprintf("<td><a href=\"%s.html\" target=\"main\">%s</a></td>", 
+              paste0("html/",species.acronyms[species]), species.names[species]), file=html)
+  
+  cat("</tr>\n", file=html)
+  
+}
+
+
+
+for(species in 1:length(species.acronyms)) {
+  cat("<tr>", file=html)
+  
+  cat("<td>&nbsp;</td>", file=html)
+  
+  
+  if(sapply(true.alarms.weekly,sum,na.rm=TRUE)[species]>0) {
+    cat("<td bgcolor='red'>", file=html)
+  } else {
+    if(sapply(scnd.alarms.weekly,sum,na.rm=TRUE)[species]>0){
+      cat("<td bgcolor='yellow'>", file=html)
+    } else{
+      cat("<td bgcolor='springgreen'>", file=html)
+    }
+  }
+  
+  cat("&nbsp;&nbsp;&nbsp;&nbsp;</td>", file=html)
+  
+  cat(sprintf("<td><a href=\"%s.html\" target=\"main\">%s</a></td>", 
+              paste0("html/",species.acronyms[species],"w"), 
+              paste0(species.names[species],"-WEEKLY")), file=html)
+  
+  cat("</tr>\n", file=html)
+  
+}
+
+
+
+cat("</table>\n\n", file=html)
+
+cat("</body>\n", file=html)
+
+cat("</html>\n", file=html)
+
+close(html)
+
+
+
 
 
 

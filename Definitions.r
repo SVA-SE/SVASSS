@@ -1,7 +1,11 @@
-PlotDaily=0
+PlotDaily=1
 
-wd.sourcefiles <- "I:/ESS/SVASSS2/"
-wd.running     <- "I:/ESS/SVASSS2/SVASSS/"
+wd.sourcefiles   <- "I:/ESS/SVASSS2/"
+wd.running       <- "I:/ESS/SVASSS2/SVASSS/"
+wd.history       <- "I:/ESS/SVASSS2/history_files/"
+wd.alarm.reports <- "I:/ESS/SVASSS2/ALARM_reports_PDF/"
+wd.html <- "Z:/SVASSS"
+wd.html.figures <- "Z:/SVASSS/figures"
 
 #wd.reports <- "I:/ESS/SVASyndromicSurveillanceSystem/regular_reports_PDF"
 #wd.alarm.reports <- "I:/ESS/SVASyndromicSurveillanceSystem/ALARM_reports_PDF/"
