@@ -101,8 +101,13 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
     last.historical.row.week  <- (which(as.character(BOV.weekly@dates[,1])==as.character(date2ISOweek(next.monday)))-1)
     
     today <- strptime(as.character(new.data.end), format = "%Y-%m-%d")
-    weekly <- FALSE
-    if(today$wday==5|PlotDaily==1)(weekly<-TRUE)
+    
+    #on 2018-05-23 SVASSS was converted to WEEKLY only and always
+    #daily analysis are still ran and recorded, so that we can always revert,
+    #but they generate no emails or html output
+              weekly <- TRUE
+              #weekly <- FALSE
+              #if(today$wday==5|PlotDaily==1)(weekly<-TRUE)
     
     
     
@@ -158,21 +163,27 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
  
   
   # emails ----    
+
+  #on 2018-05-23 SVASSS was converted to WEEKLY only and always
+  #daily analysis are still ran and recorded, so that we can always revert,
+  #but they generate no emails or html output
   
-status.true <- sapply(true.alarms.daily,sum,na.rm=TRUE)
-  status.scnd <- sapply(scnd.alarms.daily,sum,na.rm=TRUE)
-  
-  if(weekly){
-    status.true <- status.true + sapply(true.alarms.weekly,sum,na.rm=TRUE)
-    status.scnd <- status.scnd + sapply(scnd.alarms.weekly,sum,na.rm=TRUE)
-  }
+          # status.true <- sapply(true.alarms.daily,sum,na.rm=TRUE)
+          #   status.scnd <- sapply(scnd.alarms.daily,sum,na.rm=TRUE)
+          #   
+          #   if(weekly){
+          #     status.true <- status.true + sapply(true.alarms.weekly,sum,na.rm=TRUE)
+          #     status.scnd <- status.scnd + sapply(scnd.alarms.weekly,sum,na.rm=TRUE)
+          #   }
+                 status.true <- sapply(true.alarms.weekly,sum,na.rm=TRUE)
+                 status.scnd <- sapply(scnd.alarms.weekly,sum,na.rm=TRUE)
   
   
 body <- list("please visit <http://webutv/ESS/SVASSS/>")
 
 
-#Emaillist<-paste ("<fernanda.dorea@sva.se>", "<ESS-alla@sva.se>", sep=",")
-Emaillist<-"<fernanda.dorea@sva.se>"
+Emaillist<-paste ("<fernanda.dorea@sva.se>", "<ESS-alla@sva.se>", sep=",")
+#Emaillist<-"<fernanda.dorea@sva.se>"
 #Emaillist<-EmailRecipient1
 
 
@@ -300,29 +311,33 @@ cat("</tr>\n", file=html)
 
 cat("<tr><td colspan=3>&nbsp;</td></tr>\n", file=html)
 
-for(species in 1:length(species.acronyms)) {
-  cat("<tr>", file=html)
-  
-  cat("<td>&nbsp;</td>", file=html)
-  
-  if(sapply(true.alarms.daily,sum,na.rm=TRUE)[species]>0) {
-    cat("<td bgcolor='red'>", file=html)
-  } else {
-    if(sapply(scnd.alarms.daily,sum,na.rm=TRUE)[species]>0){
-      cat("<td bgcolor='yellow'>", file=html)
-    } else{
-      cat("<td bgcolor='springgreen'>", file=html)
-    }
-  }
-  
-  cat("&nbsp;&nbsp;&nbsp;&nbsp;</td>", file=html)
-  
-  cat(sprintf("<td><a href=\"%s.html\" target=\"main\">%s</a></td>", 
-              paste0("html/",species.acronyms[species]), species.names[species]), file=html)
-  
-  cat("</tr>\n", file=html)
-  
-}
+
+#on 2018-05-23 SVASSS was converted to WEEKLY only and always
+#daily analysis are still ran and recorded, so that we can always revert,
+#but they generate no emails or html output
+# for(species in 1:length(species.acronyms)) {
+#   cat("<tr>", file=html)
+#   
+#   cat("<td>&nbsp;</td>", file=html)
+#   
+#   if(sapply(true.alarms.daily,sum,na.rm=TRUE)[species]>0) {
+#     cat("<td bgcolor='red'>", file=html)
+#   } else {
+#     if(sapply(scnd.alarms.daily,sum,na.rm=TRUE)[species]>0){
+#       cat("<td bgcolor='yellow'>", file=html)
+#     } else{
+#       cat("<td bgcolor='springgreen'>", file=html)
+#     }
+#   }
+#   
+#   cat("&nbsp;&nbsp;&nbsp;&nbsp;</td>", file=html)
+#   
+#   cat(sprintf("<td><a href=\"%s.html\" target=\"main\">%s</a></td>", 
+#               paste0("html/",species.acronyms[species]), species.names[species]), file=html)
+#   
+#   cat("</tr>\n", file=html)
+#   
+# }
 
 
 
@@ -345,8 +360,8 @@ for(species in 1:length(species.acronyms)) {
   cat("&nbsp;&nbsp;&nbsp;&nbsp;</td>", file=html)
   
   cat(sprintf("<td><a href=\"%s.html\" target=\"main\">%s</a></td>", 
-              paste0("html/",species.acronyms[species],"w"), 
-              paste0(species.names[species],"-WEEKLY")), file=html)
+              paste0("html/",species.acronyms[species]), 
+              species.names[species]), file=html)
   
   cat("</tr>\n", file=html)
   

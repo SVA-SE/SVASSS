@@ -39,11 +39,6 @@ shinyUI(navbarPage(
            
            #menu 2 ----
            sidebarPanel(width=2,
-                        selectInput("window", label = h3("Temporal window"), 
-                                    choices = list("DAILY" = 1, "WEEKLY" = 2), 
-                                    selected = 2),
-                        
-                        hr(),
                         
                         uiOutput("syndromes")
                         

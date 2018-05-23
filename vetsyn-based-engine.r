@@ -298,30 +298,33 @@ if (weekly&
 
 setwd(wd.html)
 
-if (!is.na(sp.hw.daily[[sp.position]][1])){
-syndromic_page(x=daily.object[[sp.position]],
-               tpoints.display=5,
-               syndromes=sp.hw.daily[[sp.position]],
-               pretty.labels=sp.syndromes[[sp.position]][sp.hw.daily[[sp.position]]],
-               window=300,
-               baseline=TRUE,
-               UCL=1,
-               algorithms=c(1,2),
-               limit=3,
-               file.name=sp.acron,
-               title=paste("Daily report of syndromes in",sp.label, (new.data.end),sep=" "),
-               data.page=TRUE,
-               data=CD.species,
-               date.format="%d/%m/%Y",
-               dates.var="ANKOMSTDATUM",
-               syndromes.var="SYNDROMIC",
-               color.null="F8F8FF",
-               color.low="F8FF2F",
-               color.alarm="FF0000",
-               scale=10, 
-               fill.colors=c("yellow2","orange","tomato"),
-               arrow.colors=c("green","orange","tomato","red"))
-}
+#on 2018-05-23 SVASSS was converted to WEEKLY only and always
+#daily analysis are still ran and recorded, so that we can always revert,
+#but they generate no emails or html output
+# if (!is.na(sp.hw.daily[[sp.position]][1])){
+# syndromic_page(x=daily.object[[sp.position]],
+#                tpoints.display=5,
+#                syndromes=sp.hw.daily[[sp.position]],
+#                pretty.labels=sp.syndromes[[sp.position]][sp.hw.daily[[sp.position]]],
+#                window=300,
+#                baseline=TRUE,
+#                UCL=1,
+#                algorithms=c(1,2),
+#                limit=3,
+#                file.name=sp.acron,
+#                title=paste("Daily report of syndromes in",sp.label, (new.data.end),sep=" "),
+#                data.page=TRUE,
+#                data=CD.species,
+#                date.format="%d/%m/%Y",
+#                dates.var="ANKOMSTDATUM",
+#                syndromes.var="SYNDROMIC",
+#                color.null="F8F8FF",
+#                color.low="F8FF2F",
+#                color.alarm="FF0000",
+#                scale=10, 
+#                fill.colors=c("yellow2","orange","tomato"),
+#                arrow.colors=c("green","orange","tomato","red"))
+# }
 
 if(weekly){
   syndromic_page(x=weekly.object[[sp.position]],
@@ -333,7 +336,7 @@ if(weekly){
                  UCL=1,
                  algorithms=c(1,2),
                  limit=3,
-                 file.name=paste0(sp.acron,"w"),
+                 file.name=sp.acron,
                  title=paste("Weekly report of syndromes in",sp.label, (new.data.end),sep=" "),
                  data.page=FALSE,
                  data=CD.cattle,
