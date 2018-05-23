@@ -23,5 +23,7 @@ CD.species$SYNDROMIC[(!CD.species$General=="Mycotic")&(!CD.species$General=="Bac
 #   2. run detection algorithms;
 #   3. report alarms)
 
-source("vetsyn-based-engine.r",local=TRUE,encoding="native.enc")
+if(dim(CD.species)[1]>0){
+
+source("vetsyn-based-engine.r",local=TRUE,encoding="native.enc")}
 
