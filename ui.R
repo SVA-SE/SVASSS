@@ -42,6 +42,7 @@ shinyUI(navbarPage(
                         
                         uiOutput("syndromes")
                         
+                        
            ),
            
            #TABS ----
@@ -51,12 +52,14 @@ shinyUI(navbarPage(
                
                #TAB 1----
                tabPanel("Alarms",
-                        h4("Table"),
-                        h1("Header 1"),
-                        h2("Header 2"),
-                        h3("Header 3"),
-                        h4("Header 4"),
-                        h5("Header 5")
+                        
+                        plotOutput("plot.alarms.svala")
+                        # h4("Table"),
+                        # h1("Header 1"),
+                        # h2("Header 2"),
+                        # h3("Header 3"),
+                        # h4("Header 4"),
+                        # h5("Header 5")
                ),
                
                #TAB 2----
