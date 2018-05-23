@@ -297,10 +297,12 @@ if (weekly&
 # html page ----
 
 setwd(wd.html)
+
+if (!is.na(sp.hw.daily[[sp.position]][1])){
 syndromic_page(x=daily.object[[sp.position]],
                tpoints.display=5,
-               syndromes=sp.all.syndromes[[sp.position]],
-               pretty.labels=sp.syndromes[[sp.position]][sp.all.syndromes[[sp.position]]],
+               syndromes=sp.hw.daily[[sp.position]],
+               pretty.labels=sp.syndromes[[sp.position]][sp.hw.daily[[sp.position]]],
                window=300,
                baseline=TRUE,
                UCL=1,
@@ -319,6 +321,7 @@ syndromic_page(x=daily.object[[sp.position]],
                scale=10, 
                fill.colors=c("yellow2","orange","tomato"),
                arrow.colors=c("green","orange","tomato","red"))
+}
 
 if(weekly){
   syndromic_page(x=weekly.object[[sp.position]],
