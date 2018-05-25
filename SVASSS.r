@@ -26,6 +26,7 @@ require(stringr)
 require(ISOweek)
 require(devtools)
 require(lubridate)
+require(data.table)
 
 rm(list.of.packages)
 rm(new.packages)
@@ -89,6 +90,31 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
                          SRU=SRU.weekly,
                          SWI=SWI.weekly,
                          VLT=VLT.weekly)
+    
+    svaga.object <- list(CAT=CAT.svaga,
+                         BOV=BOV.svaga,
+                         DOG=DOG.svaga,
+                         ENV=ENV.svaga,
+                         FOD=FOD.svaga,
+                         FSK=FSK.svaga,
+                         EQU=EQU.svaga,
+                         AVI=AVI.svaga,
+                         SRU=SRU.svaga,
+                         SWI=SWI.svaga,
+                         VLT=VLT.svaga)
+    
+    
+    non.svaga.object <- list(CAT=CAT.non.svaga,
+                          BOV=BOV.non.svaga,
+                          DOG=DOG.non.svaga,
+                          ENV=ENV.non.svaga,
+                          FOD=FOD.non.svaga,
+                          FSK=FSK.non.svaga,
+                          EQU=EQU.non.svaga,
+                          AVI=AVI.non.svaga,
+                          SRU=SRU.non.svaga,
+                          SWI=SWI.non.svaga,
+                          VLT=VLT.non.svaga)
 
 
 # define border between historical and new data ----
@@ -182,7 +208,7 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
 body <- list("please visit <http://webutv/ESS/SVASSS/>")
 
 
-Emaillist<-paste ("<fernanda.dorea@sva.se>", "<ESS-alla@sva.se>", sep=",")
+Emaillist<-paste("<fernanda.dorea@sva.se>", "<ESS-alla@sva.se>", sep=";")
 #Emaillist<-"<fernanda.dorea@sva.se>"
 #Emaillist<-EmailRecipient1
 
@@ -251,11 +277,11 @@ cat(sprintf('<h2 align="center">%s</h2>\n', "Select a group on the navigation me
 
 cat("<TABLE border=\"0\" align=\"center\">\n", file=html)
 cat("<tr>\n", file=html)
-cat("<td>System outputs are based on data up to the end of the PREVIOUS day.</td>\n", file=html)
+cat("<td>System outputs are based on data up to the end of the PREVIOUS WEEK</td>\n", file=html)
 cat("</tr>\n", file=html)
 
 cat("<tr>\n", file=html)
-cat("<td>Number of events per day correspond to the number of laboratory submissions, classified into syndromic groups by a computer system. </td>\n", file=html)
+cat("<td>Number of events per week correspond to the number of laboratory submissions, classified into syndromic groups by a computer system. </td>\n", file=html)
 cat("</tr>\n", file=html)
 
 cat("<tr>\n", file=html)

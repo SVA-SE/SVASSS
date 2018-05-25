@@ -34,3 +34,24 @@ if(dim(dd)[1]>0)(dd$SYNDROMIC <-  "Doddes")
   
   source("vetsyn-based-engine.r",local=TRUE,encoding="native.enc")
   
+  
+  
+  # svaga data ----
+  
+  source("svaga-data-filtering.r",local=TRUE,encoding="native.enc")
+  
+  
+  
+  
+  # save data ----
+  assign(paste0(sp.acron,".svaga"),svaga.object[[sp.position]])
+  assign(paste0(sp.acron,".non.svaga"),non.svaga.object[[sp.position]])
+  
+  
+  eval(parse(text=paste0("save(",
+                         paste0(sp.acron,'.daily,'),
+                         paste0(sp.acron,'.weekly,'),
+                         paste0(sp.acron,'.svaga,'),
+                         paste0(sp.acron,'.non.svaga,'),
+                         "file='",
+                         paste0(wd.history,sp.acron,".RData'"),")")))

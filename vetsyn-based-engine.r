@@ -218,15 +218,15 @@ if(weekly){
 # save data ----
 
 
-assign(paste0(sp.acron,".daily"),daily.object[[sp.position]])
-assign(paste0(sp.acron,".weekly"),weekly.object[[sp.position]])
-
-
-eval(parse(text=paste0("save(",paste0(sp.acron,'.daily,'),
-                       paste0(sp.acron,'.weekly,'),"file='",
-                       paste0(wd.history,sp.acron,".RData'"),")")))
-
-
+# assign(paste0(sp.acron,".daily"),daily.object[[sp.position]])
+# assign(paste0(sp.acron,".weekly"),weekly.object[[sp.position]])
+# 
+# 
+# eval(parse(text=paste0("save(",paste0(sp.acron,'.daily,'),
+#                        paste0(sp.acron,'.weekly,'),"file='",
+#                        paste0(wd.history,sp.acron,".RData'"),")")))
+# 
+# 
 
 ## reporting ----
 
