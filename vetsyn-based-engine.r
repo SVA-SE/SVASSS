@@ -338,7 +338,7 @@ if(weekly){
                  limit=3,
                  file.name=sp.acron,
                  title=paste("Weekly report of syndromes in",sp.label, (new.data.end),sep=" "),
-                 data.page=FALSE,
+                 data.page=TRUE,
                  data=CD.cattle,
                  date.format="%d/%m/%Y",
                  dates.var="ANKOMSTDATUM",

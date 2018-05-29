@@ -124,11 +124,11 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
     next.monday <- nextweekday(new.data.start,2)
     
     #make sure the new data always starts on a Monday so that it has full weeks:
-    current.SVA.data <- current.SVA.data[as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y")<=next.monday,]
-    new.data.start <- min(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))  
+    current.SVA.data <- current.SVA.data[as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y")>=next.monday,]
+    new.data.start <- next.monday  
     
     last.historical.row.5days <- (which(BOV.daily@dates[,1]==new.data.start)-1)
-    last.historical.row.week  <- (which(as.character(BOV.weekly@dates[,1])==as.character(date2ISOweek(next.monday)))-1)
+    last.historical.row.week  <- (which(as.character(BOV.weekly@dates[,1])==as.character(date2ISOweek(new.data.start)))-1)
     
     today <- strptime(as.character(new.data.end), format = "%Y-%m-%d")
     
