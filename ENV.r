@@ -20,8 +20,11 @@ CD.species$SYNDROMIC[(!CD.species$Specific=="Salmonella")&(!CD.species$Specific=
 #   2. run detection algorithms;
 #   3. report alarms)
 
+if(dim(CD.species)[1]>0){
+
 source("vetsyn-based-engine.r",local=TRUE,encoding="native.enc")
 
+}
 
 
 

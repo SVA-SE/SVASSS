@@ -123,6 +123,10 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
     new.data.end   <- max(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))
     next.monday <- nextweekday(new.data.start,2)
     
+    #make sure the new data always starts on a Monday so that it has full weeks:
+    current.SVA.data <- current.SVA.data[as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y")<=next.monday,]
+    new.data.start <- min(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))  
+    
     last.historical.row.5days <- (which(BOV.daily@dates[,1]==new.data.start)-1)
     last.historical.row.week  <- (which(as.character(BOV.weekly@dates[,1])==as.character(date2ISOweek(next.monday)))-1)
     
@@ -136,6 +140,7 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
               #if(today$wday==5|PlotDaily==1)(weekly<-TRUE)
     
     
+              
     
 # create alarm objects ----
     
@@ -208,7 +213,7 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
 body <- list("please visit <http://webutv/ESS/SVASSS/>")
 
 
-Emaillist<-paste("<fernanda.dorea@sva.se>", "<ESS-alla@sva.se>", sep=";")
+Emaillist<-"<ESS-alla@sva.se>"
 #Emaillist<-"<fernanda.dorea@sva.se>"
 #Emaillist<-EmailRecipient1
 
