@@ -328,7 +328,7 @@ setwd(wd.html)
 
 if(weekly){
   syndromic_page(x=weekly.object[[sp.position]],
-                 tpoints.display=5,
+                 tpoints.display=2,
                  syndromes=sp.all.syndromes[[sp.position]],
                  pretty.labels=sp.syndromes[[sp.position]][sp.all.syndromes[[sp.position]]],
                  window=60,
@@ -339,7 +339,7 @@ if(weekly){
                  file.name=sp.acron,
                  title=paste("Weekly report of syndromes in",sp.label, (new.data.end),sep=" "),
                  data.page=TRUE,
-                 data=CD.cattle,
+                 data=CD.species,
                  date.format="%d/%m/%Y",
                  dates.var="ANKOMSTDATUM",
                  syndromes.var="SYNDROMIC",
