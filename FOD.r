@@ -73,7 +73,7 @@ if(dim(CD.syndrome)[1]>0){
   svaga.new.all <- rbindlist(list(as.data.frame(svaga.object[[sp.position]][[s]][,,1]),
                                   as.data.frame(a.all@observed)),
                              fill=TRUE)
-  svaga.new.pos <- rbindlist(list(as.data.frame(svaga.object[[sp.position]][,,2]),
+  svaga.new.pos <- rbindlist(list(as.data.frame(svaga.object[[sp.position]][[s]][,,2]),
                                   as.data.frame(a.pos@observed)),
                              fill=TRUE)
   
