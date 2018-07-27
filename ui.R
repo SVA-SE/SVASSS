@@ -53,7 +53,7 @@ shinyUI(navbarPage(
                #TAB 1----
                tabPanel("Alarms",
                         
-                        plotOutput("plot.alarms.svala")
+                        plotlyOutput("plot.alarms.svala")
                         # h4("Table"),
                         # h1("Header 1"),
                         # h2("Header 2"),
