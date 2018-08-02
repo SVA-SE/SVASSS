@@ -4,6 +4,8 @@ if (!require("markdown")) install.packages("markdown")
 require(markdown)
 if (!require("shinythemes")) install.packages("shinythemes")
 require(shinythemes)
+if (!require("plotly")) install.packages("plotly")
+require(plotly)
 
 
 library(shiny)

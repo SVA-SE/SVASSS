@@ -2,6 +2,7 @@
 
 library(shiny)
 library(plotly)
+library(ISOweek)
 
 
 
@@ -93,9 +94,10 @@ shinyServer(function(input, output, session) {
                 fill = 'tozeroy') %>%
       add_trace(y = weekly.object[[as.numeric(input$species)]]@observed[rows,input$syndromes.list],
                 name = 'Recorded events', type = 'scatter', mode = 'lines+markers',
-                line = list(shape = "linear",color="red")) %>%
+                line = list(shape = "linear",color="red"),
+                marker=list(color="red")) %>%
       add_trace(y = weekly.object[[as.numeric(input$species)]]@baseline[rows,input$syndromes.list],
-                name = 'Baseline (expected)', type = 'scatter', mode = 'lines+markers',
+                name = 'Baseline (expected)', type = 'scatter', mode = 'lines',
                 linetype = I(1),
                 line = list(shape = "linear", color="black")) %>%
       #add_bars(y = weekly.object[[as.numeric(input$species)]]@alarms[rows,input$syndromes.list,1],
