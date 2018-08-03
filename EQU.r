@@ -48,6 +48,8 @@ if(dim(dd)[1]>0)(dd$SYNDROMIC <-  "Doddes")
   # save data ----
   assign(paste0(sp.acron,".svaga"),svaga.object[[sp.position]])
   assign(paste0(sp.acron,".non.svaga"),non.svaga.object[[sp.position]])
+  assign(paste0(sp.acron,".weekly"),weekly.object[[sp.position]])
+  assign(paste0(sp.acron,".daily"),daily.object[[sp.position]])
   
   
   eval(parse(text=paste0("save(",
