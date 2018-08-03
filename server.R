@@ -72,26 +72,36 @@ shinyServer(function(input, output, session) {
       length(weekly.object[[as.numeric(input$species)]]@dates[,1])
     
     plot_ly(x = ISOweek2date(weekly.object[[as.numeric(input$species)]]@dates[rows,1])) %>% 
-      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,1]*1.5,
-                name = '99%CI', type = 'scatter', mode = 'lines',
+      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,9]*1.5,
+                name = 'HW alarm level 5', type = 'scatter', mode = 'lines',
+                line = list(color = 'transparent'),
+                fillcolor='red',
+                fill = 'tozeroy') %>%
+      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,8]*1.25,
+                name = 'HW 4', type = 'scatter', mode = 'lines',
                 line = list(color = 'transparent'),
                 fillcolor='tomato',
                 fill = 'tozeroy') %>%
-      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,1]*1.25,
-                name = '97.5%', type = 'scatter', mode = 'lines',
+      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,7],
+                name = 'HW 3', type = 'scatter', mode = 'lines',
                 line = list(color = 'transparent'),
                 fillcolor='orange',
                 fill = 'tozeroy') %>%
-      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,1],
-                name = '95%', type = 'scatter', mode = 'lines',
+      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,6],
+                name = 'HW 2', type = 'scatter', mode = 'lines',
                 line = list(color = 'transparent'),
                 fillcolor='yellow',
                 fill = 'tozeroy') %>%
-      add_trace(y = weekly.object[[as.numeric(input$species)]]@baseline[rows,input$syndromes.list],
-                name = '', type = 'scatter', mode = 'lines',
+      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,5],
+                name = 'HW 1', type = 'scatter', mode = 'lines',
                 line = list(color = 'transparent'),
                 fillcolor='lightgreen',
                 fill = 'tozeroy') %>%
+      # add_trace(y = weekly.object[[as.numeric(input$species)]]@baseline[rows,input$syndromes.list],
+      #           name = '', type = 'scatter', mode = 'lines',
+      #           line = list(color = 'transparent'),
+      #           fillcolor='lightgreen',
+      #           fill = 'tozeroy') %>%
       add_trace(y = weekly.object[[as.numeric(input$species)]]@observed[rows,input$syndromes.list],
                 name = 'Recorded events', type = 'scatter', mode = 'lines+markers',
                 line = list(shape = "linear",color="red"),

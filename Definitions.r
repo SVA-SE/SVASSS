@@ -73,7 +73,7 @@ sp.syndromes<- list(
 shew.limits <- c(2.75,3,3.25,3.75,4.25)
 ewma.limits <- c(2.75,3,3.25,3.75,4.25)
 csum.limits <- c(3.25,3.5,3.75,4,4.25)
-hw.limits   <- c(2.5,2.75,3,3.5,4)
+hw.limits   <- c(1.3,1.645,3,3.5,4)
 
 
 guard.band <- 5
