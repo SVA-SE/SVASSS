@@ -78,6 +78,28 @@ if(weekly){
                                                     correct.baseline=3,
                                                     alarm.dim=1,
                                                     UCL=3)
+  
+  
+  for (u in 1:length(hw.limits)){
+    UCL_temp <- holt_winters_synd(x=weekly.object[[sp.position]],
+                                  syndromes=sp.hw.weekly[[sp.position]],
+                                  evaluate.window=weekly.evaluate.window,
+                                  frequency=52,
+                                  baseline.window=baseline.window.week,
+                                  limit.sd=hw.limits[u],
+                                  nahead=guard.band.week,
+                                  alpha=0.4,
+                                  beta=0,
+                                  gamma=0.15,
+                                  seasonal="additive",
+                                  correct.baseline=FALSE,
+                                  alarm.dim=1,
+                                  UCL=1)
+    weekly.object[[sp.position]]@UCL[,,4+u]<-UCL_temp@UCL[,,1]
+    #weekly.object[[sp.position]]@UCL<-abind(weekly.object[[sp.position]]@UCL,UCL_temp@UCL[,,1],along=3)
+  }
+  
+  
 }}
 
 # ewma ----
