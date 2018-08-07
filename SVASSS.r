@@ -209,7 +209,8 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
           #   }
                  status.true <- sapply(true.alarms.weekly,sum,na.rm=TRUE)
                  status.scnd <- sapply(scnd.alarms.weekly,sum,na.rm=TRUE)
-  
+                 save(status.true,status.scnd,file=paste0(wd.history,"/status.RData"))
+                 
   
 body <- list("please visit <http://webutv/ESS/SVASSS/>")
 

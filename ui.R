@@ -20,10 +20,15 @@ shinyUI(navbarPage(
   # tabpanel=Syndromic Surveillance ----
   
   tabPanel("Syndromic Surveillance",
+           #menu 1 ----
+           #sidebarPanel(width=1,
+          #              plotOutput("species.summary")
+          # ),
+                        
+           #menu 2 ----
            sidebarPanel(width=2,
-             
-                        #menu 1 ----
-              radioButtons("species", label = h3("Choose species"),
+                        plotOutput("species.summary"),
+                        radioButtons("species", label = h3("Choose species"),
                            choices = list(
                              "Cats" = 1, 
                              "Cattle" = 2, 
@@ -39,7 +44,7 @@ shinyUI(navbarPage(
                            selected = 2)
            ),
            
-           #menu 2 ----
+           #menu 3 ----
            sidebarPanel(width=2,
                         
                         uiOutput("syndromes")
@@ -50,28 +55,83 @@ shinyUI(navbarPage(
            #TABS ----
            
            mainPanel(
-             tabsetPanel(
+             tabsetPanel(id = "tabs",
                
                #TAB 1----
-               tabPanel("Alarms",
+               tabPanel("Summary", value ="#panel_summary",
+                        plotOutput("alarms.per.species"),
                         
-                        plotlyOutput("plot.alarms.svala")
-                        # h4("Table"),
-                        # h1("Header 1"),
-                        # h2("Header 2"),
-                        # h3("Header 3"),
-                        # h4("Header 4"),
-                        # h5("Header 5")
-               ),
+                        h4("Select a specific syndrome onthe left, and navigate to detailed information"),
+                        tags$a("Go to Specific alarm charts", href = "#panel_alarm_charts"),
+                        br(),
+                        tags$a("Go to MAPS", href = "#panel_maps"),
+                        br(),
+                        tags$a("See the original SVALA data", href = "#panel_data"),
+                        br(),
+                        h4("True alarms:"),
+                        h5("Are alarms from the algorithm that can deal with seasonal effetc (Holt-Winters).
+                            The plot shows a bar from 0 to 5, indicating the gravity of outbreak signal detected
+                            in the data from last week. The red vertical lines are the alarm threshold 
+                            for each syndrome - if the outbreak signal is strong enough to be greater than the
+                            threshold, the bar is colored red, and an e-mail is sent to ESS stating 
+                            'true alarms detected'."),
+                        h5("These alarms are more trust-worthy, but only applicable when there is enough data. 
+                            If a syndrome doesn't have a red vertical threshold, then the algorithm is NOT BEING
+                            APPLIED. In this case, it is important to pay more attention to the secondary
+                            alarms"),
+                        h4("Secondary alarms:"),
+                        h5("Outbreak signal using the algorithm EWMA, which does not account for seasons.
+                           Please note that for syndromes for which there is no true (primary) alarm data, you should
+                           pay close attention to secondary alarms.")
+                        
+                        
+                        ),
                
                #TAB 2----
-               tabPanel("Charts", "This panel is intentionally left blank"),
+               
+               tabPanel("Alarms charts", value ="#panel_alarm_charts",
+                        
+                        plotlyOutput("plot.alarms.svala"),
+                        
+                        h4("Change syndrome on the left"),
+                        tags$a("Go to MAPS", href = "#panel_maps"),
+                        br(),
+                        tags$a("See the original SVALA data", href = "#panel_data"),
+                        br(),
+                        tags$a("Go back to summary", href = "#panel_summary")
+                        
+                        
+                        
+               ),
+               
+               
                
                #TAB 3----
-               tabPanel("Maps", "This panel is intentionally left blank"),
+               tabPanel("Maps", value ="#panel_maps",
+                        
+                        
+                        h4("Change syndrome on the left"),
+                        tags$a("Go to Specific alarm charts", href = "#panel_alarm_charts"),
+                        br(),
+                        tags$a("See the original SVALA data", href = "#panel_data"),
+                        br(),
+                        tags$a("Go back to summary", href = "#panel_summary")
+                        
+                        ),
                
                #TAB 4----
-               tabPanel("Data", "This panel is intentionally left blank")
+               tabPanel("Data", value ="#panel_data",
+                        
+                        
+                        
+                        h4("Change syndrome on the left"),
+                        tags$a("Go to Specific alarm charts", href = "#panel_alarm_charts"),
+                        br(),
+                        tags$a("Go to MAPS", href = "#panel_maps"),
+                        br(),
+                        tags$a("Go back to summary", href = "#panel_summary")
+                        
+                        )
              )
            )
   ),

@@ -12,6 +12,8 @@ shinyServer(function(input, output, session) {
   #data imported from outside ----
   source("Definitions.r",local=TRUE,encoding="native.enc")
   
+  load(paste0(wd.history,"/status.RData"))
+  
   for(species in species.acronyms){
     eval(parse(text=paste0("load('",wd.history,species,".RData')")))
   }
@@ -33,6 +35,9 @@ shinyServer(function(input, output, session) {
                         SRU=SRU.weekly,
                         SWI=SWI.weekly,
                         VLT=VLT.weekly)
+  
+  
+  
   
   
     #select syndromes checkboxes ----
@@ -145,6 +150,81 @@ shinyServer(function(input, output, session) {
   })
     
     
+  output$species.summary  <- renderPlot({
+    barplot(rep(1,length(status.true)),
+            xlim=c(0,1),
+            names.arg=rev(species.acronyms),
+            horiz=TRUE,
+            col=ifelse(rev(status.true)>0,"red",ifelse(rev(status.scnd)>0,"yellow","green")),
+            main="Alarms",
+            las=1,
+            xaxt="n")
+  }) 
+  
+  
+  output$alarms.per.species <- renderPlot({
+    par(mfrow=c(1,2),mar=c(5,10,4,1)) #bottom, left, top, right
     
+    plotb1=rev(weekly.object[[as.numeric(input$species)]]@alarms[
+      dim(weekly.object[[as.numeric(input$species)]]@alarms)[1],,1])
+    plotb2=rev(sp.weekly.hw.thresholds[[as.numeric(input$species)]])
+    plotb2[plotb2>5]<-NA
+    b=barplot(plotb1,
+              xlim=c(0,5),
+              names.arg=rev(sp.syndromes.names[[as.numeric(input$species)]]),
+              horiz=TRUE,
+              col=ifelse(plotb1>plotb2,"red",ifelse(plotb1==plotb2,"yellow","green")),
+              main="TRUE alarms",
+              las=1)
+    points(y=b,x=plotb2,col="red",pch="|")
+    
+    plotc1=rev(weekly.object[[as.numeric(input$species)]]@alarms[
+      dim(weekly.object[[as.numeric(input$species)]]@alarms)[1],,2])
+    plotc2=rev(sp.weekly.ewma.thresholds[[as.numeric(input$species)]])
+    plotc2[plotb2>5]<-NA
+    c=barplot(plotc1,
+              xlim=c(0,5),
+              names.arg=rev(sp.syndromes.names[[as.numeric(input$species)]]),
+              horiz=TRUE,
+              col=ifelse(plotc1>plotc2,"red",ifelse(plotc1==plotc2,"yellow","green")),
+              main="Secondary alarms",
+              las=1)
+    points(y=c,x=plotc2,col="red",pch="|")
+  })
+  
+  
+  # When we change from one `tabPanel` to another, update the URL hash
+  observeEvent(input$tabs, {
+    
+    # No work to be done if input$tabs and the hash are already the same
+    if (getUrlHash() == input$tabs) return()
+    
+    # The 'push' argument is necessary so that the hash change event occurs and
+    # so that the other observer is triggered.
+    updateQueryString(
+      paste0(getQueryString(), input$tabs),
+      "push"
+    )
+    # Don't run the first time so as to not generate a circular dependency 
+    # between the two observers
+  }, ignoreInit = TRUE)
+  
+  # When the hash changes (due to clicking on the link in the sidebar or switching
+  # between the `tabPanel`s), switch tabs and update an input. Note that clicking 
+  # another `tabPanel` already switches tabs.
+  observeEvent(getUrlHash(), {
+    hash <- getUrlHash()
+    
+    # No work to be done if input$tabs and the hash are already the same
+    if (hash == input$tabs) return()
+    
+    valid <- c("#panel_summary", "#panel_alarm_charts", "#panel_maps","#panel_data")
+    
+    if (hash %in% valid) {
+      updateTabsetPanel(session, "tabs", hash)
+    }
+  })
+  
+  
   
 })
