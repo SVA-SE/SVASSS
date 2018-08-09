@@ -197,7 +197,17 @@ load(paste0(wd.history,"classified.species.data.RData"))
       as.Date(classified.species.data$ANKOMSTDATUM,format="%d/%m/%Y")>(max(
         as.Date(classified.species.data$ANKOMSTDATUM,format="%d/%m/%Y"))-366),]
     
-    save(classified.species.data,file=paste0(wd.history,"/classified.species.data.RData"))
+    display.data <- classified.species.data[,c("UPPDRAG","ANKOMSTDATUM","ÖVERORDNATUPPDRAG","ÖVERORDNADEUPPDRAG","PROVTAGNINGSORSAK","INSÄNTMATERIAL",
+                                               "DJURSLAG","DIAGNOSER","RESULTATUNDERSÖKNING","RESULTATANALYS",
+                                               "AGENS","PÅVISAD","ANALYSBESKRIVNING","ANALYSMATERIAL","UNDERSÖKNINGBESKRIVNING","MATERIAL",
+                                               "PPN_original","CITY","SYNDROMIC","SPECIES")]
+    
+    week <- date2ISOweek(as.Date(display.data$ANKOMSTDATUM,format="%d/%m/%Y"))
+    week <- substr(week,1,8)
+    display.data <- cbind(display.data,week)
+    
+    
+    save(display.data,classified.species.data,file=paste0(wd.history,"/classified.species.data.RData"))
     
     
   

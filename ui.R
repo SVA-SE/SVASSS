@@ -9,6 +9,7 @@ require(plotly)
 if (!require("DT")) install.packages("DT")
 require(DT)
 
+
 library(shiny)
 
 source("Definitions.r",local=TRUE,encoding="native.enc")
@@ -58,7 +59,7 @@ shinyUI(navbarPage(
            mainPanel(
              tabsetPanel(id = "tabs",
                
-               #TAB 1----
+               #TAB Summary----
                tabPanel("Summary", value ="#panel_summary",
                         plotOutput("alarms.per.species"),
                         
@@ -88,7 +89,7 @@ shinyUI(navbarPage(
                         
                         ),
                
-               #TAB 2----
+               #TAB Alarm charts----
                
                tabPanel("Alarms charts", value ="#panel_alarm_charts",
                         
@@ -107,7 +108,7 @@ shinyUI(navbarPage(
                
                
                
-               #TAB 3----
+               #TAB MAPS----
                tabPanel("Maps", value ="#panel_maps",
                         
                         
@@ -120,28 +121,28 @@ shinyUI(navbarPage(
                         
                         ),
                
-               #TAB 4----
+               #TAB DATA ----
                tabPanel("Data", value ="#panel_data",
+                        #row 1 = select data
                         fluidRow(
-                          column(3,
-                                 uiOutput("species.table")
+                          
+                          column(4,
+                                 uiOutput("week.table")
                           ),
-                          column(3,
-                                 uiOutput("syndromes.table")
-                          ),
-                          column(3,
-                                 selectInput("week.table",
-                                             "Week:",
-                                             c("All",
-                                               unique(as.character(display.data$week))))
-                          ),
-                          column(3,
-                                 selectInput("pavisad.table",
-                                             "Påvisad:",
-                                             c("All",
-                                               unique(as.character(display.data$PÅVISAD))))
+                          column(4,
+                                 uiOutput(("pavisad.table"))
                           )
                         ),
+                        
+                        #row 2 = select columns
+                        fluidRow(
+                          checkboxGroupInput(inputId="columns.table", label="Select columns to display", 
+                                             choices=colnames(display.data), 
+                                             selected=colnames(display.data),
+                                             inline = TRUE)
+                        ),
+                        
+                        
                         # Create a new row for the table.
                         fluidRow(
                           DT::dataTableOutput("table")

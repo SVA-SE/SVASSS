@@ -8,14 +8,15 @@ library(DT)
 
 
 
+
 shinyServer(function(input, output, session) {
   
   #data imported from outside ----
   source("Definitions.r",local=TRUE,encoding="native.enc")
   
   load(paste0(wd.history,"/status.RData"))
-  load(paste0(wd.sourcefiles,"/svala.data.RData"))
-  display.data <- svala.data[svala.data.dates>=(max(svala.data.dates)-60),]
+  load(paste0(wd.history,"/classified.species.data.Rdata"))
+  
   
   
   for(species in species.acronyms){
@@ -23,7 +24,7 @@ shinyServer(function(input, output, session) {
   }
   
   sp.syndromes.names <- lapply(1:length(sp.syndromes), function(x){
-    synd.list <- as.list(sp.syndromes[[x]])
+    synd.list <- as.list(1:length(sp.syndromes[[x]]))#as.list(sp.syndromes[[x]])
     names(synd.list) <- sp.syndromes[[x]]
     return(synd.list)
   })
@@ -48,9 +49,9 @@ shinyServer(function(input, output, session) {
   
     output$syndromes <- renderUI({
       input$species
-      radioButtons("syndromes.list", "Select syndromes", 
+      radioButtons("syndromes", "Select syndromes", 
                                                choices = sp.syndromes.names[[as.numeric(input$species)]],
-                                               selected = sp.syndromes[[as.numeric(input$species)]][1]     )
+                                               selected = 1     )
       
   })
 
@@ -58,13 +59,13 @@ shinyServer(function(input, output, session) {
   # renderPlot for syndromic data ----
   
   #input$species <- 2
-  #input$syndromes.list <- "Respiratory"
-  #--> can't be used for plotly -->input$syndromes.list <- c("Abortion","Respiratory")
+  #input$syndromes <- "Respiratory"
+  #--> can't be used for plotly -->input$syndromes <- c("Abortion","Respiratory")
   
   # output$plot.alarms.svala <- renderPlot({
   #   input$species
   #   plot(x=weekly.object[[as.numeric(input$species)]],
-  #        syndromes=input$syndromes.list,
+  #        syndromes=input$syndromes,
   #        window=baseline.window.week,
   #        baseline=TRUE,
   #        UCL=1,
@@ -81,50 +82,50 @@ shinyServer(function(input, output, session) {
       length(weekly.object[[as.numeric(input$species)]]@dates[,1])
     
     plot_ly(x = ISOweek2date(weekly.object[[as.numeric(input$species)]]@dates[rows,1])) %>% 
-      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,9]*1.5,
+      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,sp.colnames[[as.numeric(input$species)]][[as.numeric(input$syndromes)]],9]*1.5,
                 name = 'HW alarm level 5', type = 'scatter', mode = 'lines',
                 line = list(color = 'transparent'),
                 fillcolor='red',
                 fill = 'tozeroy') %>%
-      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,8]*1.25,
+      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,sp.colnames[[as.numeric(input$species)]][[as.numeric(input$syndromes)]],8]*1.25,
                 name = 'HW 4', type = 'scatter', mode = 'lines',
                 line = list(color = 'transparent'),
                 fillcolor='tomato',
                 fill = 'tozeroy') %>%
-      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,7],
+      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,sp.colnames[[as.numeric(input$species)]][[as.numeric(input$syndromes)]],7],
                 name = 'HW 3', type = 'scatter', mode = 'lines',
                 line = list(color = 'transparent'),
                 fillcolor='orange',
                 fill = 'tozeroy') %>%
-      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,6],
+      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,sp.colnames[[as.numeric(input$species)]][[as.numeric(input$syndromes)]],6],
                 name = 'HW 2', type = 'scatter', mode = 'lines',
                 line = list(color = 'transparent'),
                 fillcolor='yellow',
                 fill = 'tozeroy') %>%
-      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,5],
+      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,sp.colnames[[as.numeric(input$species)]][[as.numeric(input$syndromes)]],5],
                 name = 'HW 1', type = 'scatter', mode = 'lines',
                 line = list(color = 'transparent'),
                 fillcolor='lightgreen',
                 fill = 'tozeroy') %>%
-      # add_trace(y = weekly.object[[as.numeric(input$species)]]@baseline[rows,input$syndromes.list],
+      # add_trace(y = weekly.object[[as.numeric(input$species)]]@baseline[rows,input$syndromes],
       #           name = '', type = 'scatter', mode = 'lines',
       #           line = list(color = 'transparent'),
       #           fillcolor='lightgreen',
       #           fill = 'tozeroy') %>%
-      add_trace(y = weekly.object[[as.numeric(input$species)]]@observed[rows,input$syndromes.list],
+      add_trace(y = weekly.object[[as.numeric(input$species)]]@observed[rows,sp.colnames[[as.numeric(input$species)]][[as.numeric(input$syndromes)]]],
                 name = 'Recorded events', type = 'scatter', mode = 'lines+markers',
                 line = list(shape = "linear",color="red"),
                 marker=list(color="red")) %>%
-      add_trace(y = weekly.object[[as.numeric(input$species)]]@baseline[rows,input$syndromes.list],
+      add_trace(y = weekly.object[[as.numeric(input$species)]]@baseline[rows,sp.colnames[[as.numeric(input$species)]][[as.numeric(input$syndromes)]]],
                 name = 'Baseline (expected)', type = 'scatter', mode = 'lines',
                 linetype = I(1),
                 line = list(shape = "linear", color="black")) %>%
-      #add_bars(y = weekly.object[[as.numeric(input$species)]]@alarms[rows,input$syndromes.list,1],
+      #add_bars(y = weekly.object[[as.numeric(input$species)]]@alarms[rows,input$syndromes,1],
       #         name = 'Alarms HW', type = 'scatter',
       #         marker = list(color = 'rgba(55, 128, 191, 0.7)',
       #                       line = list(color = 'rgba(55, 128, 191, 0.7)',
       #                                   width = 4))) %>%
-      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,input$syndromes.list,2],
+      add_trace(y = weekly.object[[as.numeric(input$species)]]@UCL[rows,sp.colnames[[as.numeric(input$species)]][[as.numeric(input$syndromes)]],2],
                 name = '95% CI secondary alarms', type = 'scatter', mode = 'lines',
                 linetype = I(1),
                 line = list(shape = "linear", color="purple",dash = 'dot')) %>%
@@ -182,7 +183,7 @@ shinyServer(function(input, output, session) {
     plotb2[plotb2>5]<-NA
     b=barplot(plotb1,
               xlim=c(0,5),
-              names.arg=rev(sp.syndromes.names[[as.numeric(input$species)]]),
+              names.arg=rev(sp.syndromes[[as.numeric(input$species)]]),
               horiz=TRUE,
               col=ifelse(plotb1>plotb2,"red",ifelse(plotb1==plotb2,"yellow","green")),
               main="TRUE alarms",
@@ -195,7 +196,7 @@ shinyServer(function(input, output, session) {
     plotc2[plotb2>5]<-NA
     c=barplot(plotc1,
               xlim=c(0,5),
-              names.arg=rev(sp.syndromes.names[[as.numeric(input$species)]]),
+              names.arg=rev(sp.syndromes[[as.numeric(input$species)]]),
               horiz=TRUE,
               col=ifelse(plotc1>plotc2,"red",ifelse(plotc1==plotc2,"yellow","green")),
               main="Secondary alarms",
@@ -205,48 +206,45 @@ shinyServer(function(input, output, session) {
   
   # data table tab ----
   
-  output$species.table <- renderUI({
-    input$species
-    selectInput("species.table",
-                "Species:",
-                c("All",species.names),
-                selected = species.names[as.numeric(input$species)])
-  })
-  
-  output$syndromes.table <- renderUI({
-    input$species
-    selectInput("syndromes.table",
-                "Syndrome:",
-                c("All",syndromes.names),
-                selected = input$syndromes.list)
+  output$week.table <- renderUI({
+    selectInput("week.table",
+              "Week:",
+              c("All",
+                rev(unique(as.character(display.data$week)))))
   })
   
   
+  output$pavisad.table <- renderUI({
+    selectInput("pavisad.table",
+              "PÃ¥visad:",
+              c("All",
+                unique(as.character(display.data$PÃ…VISAD))))
+  })
   
-  # output$table <- DT::renderDataTable(DT::datatable({
-  #   data <- display.data
-  #   if (input$species != "All") {
-  #     data <- data[data$SPECIES == input$species.table,]
-  #   }
-  #   if (input$cyl != "All") {
-  #     data <- data[data$cyl == input$cyl,]
-  #   }
-  #   if (input$trans != "All") {
-  #     data <- data[data$trans == input$trans,]
-  #   }
-  #   data
-  # }))
-  # 
-  # svala.data[,c("UPPDRAG","ANKOMSTDATUM","ÖVERORDNATUPPDRAG","ÖVERORDNADEUPPDRAG","PROVTAGNINGSORSAK","INSÄNTMATERIAL",
-  #               "DJURSLAG","DIAGNOSER","RESULTATUNDERSÖKNING","RESULTATANALYS",
-  #               "AGENS","PÅVISAD","ANALYSBESKRIVNING","ANALYSMATERIAL","UNDERSÖKNINGBESKRIVNING","MATERIAL",
-  #               "PPN_original","CITY","SYNDROMIC","SPECIES")]
-  #display.data
-  #save week (save only 4-8 last weeks?)
-  #"Avian" to "Poultry"  "Dog" to "Dogs"            "Environment" to "Environm."
-  #"Cat" to "Cats"       "Equidae" to "Horses" 
-  #syndrome labels to syndromes names
-  #antimicrobial resistance and doodes not on syndromic
+  
+   output$table <- DT::renderDataTable(DT::datatable(rownames= FALSE,{
+     load(paste0(wd.history,"/classified.species.data.Rdata"))
+     
+     data <- display.data
+     data <- data[data$SPECIES == species.original[as.numeric(input$species)],]
+     data <- data[data$SYNDROMIC == sp.colnames[[as.numeric(input$species)]][as.numeric(input$syndromes)],]
+     if (input$week.table != "All") {
+       data <- data[data$week == input$week.table,]
+     }
+     if (input$pavisad.table != "All") {
+       data <- data[data$PÃ…VISAD == input$pavisad.table,]
+     }
+
+          data[,input$columns.table, drop = FALSE]
+   }, options=list(
+     initComplete = JS(
+       "function(settings, json) {",
+       "$(this.api().table().header()).css({'font-size': '80%'});",
+       "}"))
+   )
+   %>%
+    DT::formatStyle(columns = input$columns.table, fontSize = '80%')
+   )
   
  
   

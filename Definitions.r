@@ -27,6 +27,10 @@ species.acronyms = c("CAT","BOV","DOG","ENV","FOD","FSK","EQU","AVI","SRU",
 species.names=c("Cats","Cattle","Dogs","Environm.","FOD","FSK","Horses","Poultry","Small Ruminants",
                 "Swine","VLT")#,"CDB","SJV-Cattle(D)","SJV-Cattle(W)","SJV-Horses(D)","SJV-Horses(W)","SJV-Pigs(D)","SJV-Pigs(W)","SJV-S.Rumin(D)","SJV-S.Rumin(W)","SJV-Poultry","Quality")
 
+#ugly names for some reasons still in the original classified files:
+species.original=c("Cat","Cattle","Dog","Environment","FOD","FSK",
+                   "Equidae","Avian","Small Ruminant","Swine","VLT")
+
 #syndrome names as they appear in the result of classification algorithms (SYNDROMIC columns in SVASSS)
 syndromes.labels = c("Abortion", "CHH","EEO","Integumentary", "GIT", 
                    "MBS", "Mastitis", "Musculoskeletal","Nervous","Reproductive",
