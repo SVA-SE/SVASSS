@@ -6,7 +6,8 @@ if (!require("shinythemes")) install.packages("shinythemes")
 require(shinythemes)
 if (!require("plotly")) install.packages("plotly")
 require(plotly)
-
+if (!require("DT")) install.packages("DT")
+require(DT)
 
 library(shiny)
 
@@ -121,7 +122,30 @@ shinyUI(navbarPage(
                
                #TAB 4----
                tabPanel("Data", value ="#panel_data",
-                        
+                        fluidRow(
+                          column(3,
+                                 uiOutput("species.table")
+                          ),
+                          column(3,
+                                 uiOutput("syndromes.table")
+                          ),
+                          column(3,
+                                 selectInput("week.table",
+                                             "Week:",
+                                             c("All",
+                                               unique(as.character(display.data$week))))
+                          ),
+                          column(3,
+                                 selectInput("pavisad.table",
+                                             "Påvisad:",
+                                             c("All",
+                                               unique(as.character(display.data$PÅVISAD))))
+                          )
+                        ),
+                        # Create a new row for the table.
+                        fluidRow(
+                          DT::dataTableOutput("table")
+                        ),
                         
                         
                         h4("Change syndrome on the left"),

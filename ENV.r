@@ -17,6 +17,7 @@ CD.species$SYNDROMIC[CD.species$Specific=="E.coli"] <- "E.coli"
 CD.species$SYNDROMIC[CD.species$Specific=="Salmonella"] <- "Salmonella"
 CD.species$SYNDROMIC[(!CD.species$Specific=="Salmonella")&(!CD.species$Specific=="E.coli")] <- "Rest"
 
+classified.species.data <- rbind(classified.species.data,CD.species)
 
 # running vetsyn-based-engine ----
 #(running the codes that are the same for every syndromic object, namely:

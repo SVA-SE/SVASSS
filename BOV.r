@@ -27,6 +27,7 @@ if(dim(dd)[1]>0)(dd$SYNDROMIC <-  "Doddes")
                          CD.species$General=="Viral"] <- "Viral"
 
   
+  classified.species.data <- rbind(classified.species.data,CD.species)
   
 # running vetsyn-based-engine ----
   #(running the codes that are the same for every syndromic object, namely:

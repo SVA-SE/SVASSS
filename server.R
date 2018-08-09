@@ -3,6 +3,7 @@
 library(shiny)
 library(plotly)
 library(ISOweek)
+library(DT)
 
 
 
@@ -13,6 +14,9 @@ shinyServer(function(input, output, session) {
   source("Definitions.r",local=TRUE,encoding="native.enc")
   
   load(paste0(wd.history,"/status.RData"))
+  load(paste0(wd.sourcefiles,"/svala.data.RData"))
+  display.data <- svala.data[svala.data.dates>=(max(svala.data.dates)-60),]
+  
   
   for(species in species.acronyms){
     eval(parse(text=paste0("load('",wd.history,species,".RData')")))
@@ -149,6 +153,8 @@ shinyServer(function(input, output, session) {
     
   })
     
+  
+  # species summary ----
     
   output$species.summary  <- renderPlot({
     barplot(rep(1,length(status.true)),
@@ -161,6 +167,11 @@ shinyServer(function(input, output, session) {
             xaxt="n")
   }) 
   
+  
+  
+  
+  
+  # syndromes per species summary ----
   
   output$alarms.per.species <- renderPlot({
     par(mfrow=c(1,2),mar=c(5,10,4,1)) #bottom, left, top, right
@@ -192,6 +203,56 @@ shinyServer(function(input, output, session) {
     points(y=c,x=plotc2,col="red",pch="|")
   })
   
+  # data table tab ----
+  
+  output$species.table <- renderUI({
+    input$species
+    selectInput("species.table",
+                "Species:",
+                c("All",species.names),
+                selected = species.names[as.numeric(input$species)])
+  })
+  
+  output$syndromes.table <- renderUI({
+    input$species
+    selectInput("syndromes.table",
+                "Syndrome:",
+                c("All",syndromes.names),
+                selected = input$syndromes.list)
+  })
+  
+  
+  
+  # output$table <- DT::renderDataTable(DT::datatable({
+  #   data <- display.data
+  #   if (input$species != "All") {
+  #     data <- data[data$SPECIES == input$species.table,]
+  #   }
+  #   if (input$cyl != "All") {
+  #     data <- data[data$cyl == input$cyl,]
+  #   }
+  #   if (input$trans != "All") {
+  #     data <- data[data$trans == input$trans,]
+  #   }
+  #   data
+  # }))
+  # 
+  # svala.data[,c("UPPDRAG","ANKOMSTDATUM","ÖVERORDNATUPPDRAG","ÖVERORDNADEUPPDRAG","PROVTAGNINGSORSAK","INSÄNTMATERIAL",
+  #               "DJURSLAG","DIAGNOSER","RESULTATUNDERSÖKNING","RESULTATANALYS",
+  #               "AGENS","PÅVISAD","ANALYSBESKRIVNING","ANALYSMATERIAL","UNDERSÖKNINGBESKRIVNING","MATERIAL",
+  #               "PPN_original","CITY","SYNDROMIC","SPECIES")]
+  #display.data
+  #save week (save only 4-8 last weeks?)
+  #"Avian" to "Poultry"  "Dog" to "Dogs"            "Environment" to "Environm."
+  #"Cat" to "Cats"       "Equidae" to "Horses" 
+  #syndrome labels to syndromes names
+  #antimicrobial resistance and doodes not on syndromic
+  
+ 
+  
+  
+  
+  # code to make links between tabs ----
   
   # When we change from one `tabPanel` to another, update the URL hash
   observeEvent(input$tabs, {

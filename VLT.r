@@ -28,6 +28,7 @@ if(dim(total)[1]>0)(total$SYNDROMIC <-  "Total")
   CD.species$SYNDROMIC[CD.species$SYNDROMIC=="GIT"&
                          CD.species$General=="Viral"] <- "Viral"
 
+  classified.species.data <- rbind(classified.species.data,CD.species)
   
   
   

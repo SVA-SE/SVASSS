@@ -16,7 +16,7 @@ if(dim(dd)[1]>0)(dd$SYNDROMIC <-  "Doddes")
   
   CD.species <- rbind(CD.species,am,dd)
 
-  
+  classified.species.data <- rbind(classified.species.data,CD.species)
   
   
   # running vetsyn-based-engine ----

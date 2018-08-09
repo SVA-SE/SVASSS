@@ -59,7 +59,7 @@ PPN.database <- read.csv2(paste0(wd.sourcefiles,"ppn_alla.csv"), as.is=TRUE)
 PPN.database$X <- as.numeric(PPN.database$X)
 PPN.database$Y <- as.numeric(PPN.database$Y)
 
-
+load(paste0(wd.history,"classified.species.data.RData"))
     
 # historical data in ----
     
@@ -179,20 +179,27 @@ PPN.database$Y <- as.numeric(PPN.database$Y)
     
        
 # saving data for apps ----
- load(paste0(wd.sourcefiles,"svala.data.RData"))
- #svala.data.dates
- #current.data.dates
- #min.date.current
- #max.data.current
+ # load(paste0(wd.sourcefiles,"svala.data.RData"))
+ # #svala.data.dates
+ # #current.data.dates
+ # #min.date.current
+ # #max.data.current
+ # 
+ # keep.svala <- which((svala.data.dates<min(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y")))&(svala.data.dates>(max(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))-550)))
+ #  svala.data <- rbind(svala.data[keep.svala,],
+ #                      current.SVA.data)
+ # svala.data.dates <- as.Date(svala.data$ANKOMSTDATUM, format = "%d/%m/%Y", origin="01/01/1970")
+ #  save(svala.data,svala.data.dates,file=paste0(wd.sourcefiles,"/svala.data.RData"))
+ # 
  
- keep.svala <- which((svala.data.dates<min(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y")))&(svala.data.dates>(max(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))-550)))
-  svala.data <- rbind(svala.data[keep.svala,],
-                      current.SVA.data)
- svala.data.dates <- as.Date(svala.data$ANKOMSTDATUM, format = "%d/%m/%Y", origin="01/01/1970")
-  save(svala.data,svala.data.dates,file=paste0(wd.sourcefiles,"/svala.data.RData"))
- 
- 
- 
+#on 2018-08-09 substituted by saving data after processing within each species. 
+    classified.species.data <- classified.species.data[
+      as.Date(classified.species.data$ANKOMSTDATUM,format="%d/%m/%Y")>(max(
+        as.Date(classified.species.data$ANKOMSTDATUM,format="%d/%m/%Y"))-366),]
+    
+    save(classified.species.data,file=paste0(wd.history,"/classified.species.data.RData"))
+    
+    
   
   # emails ----    
 
