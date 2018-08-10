@@ -4,6 +4,7 @@ library(shiny)
 library(plotly)
 library(ISOweek)
 library(DT)
+library(shinycssloaders)
 
 
 
@@ -50,8 +51,6 @@ get_plot_output_list <- function(max_plots, barplot.data, weeks, weeks.to.plot) 
                             ticks = 'outside',
                             zeroline = FALSE),
                legend=list(orientation="h"))    
-      
-      
       
       
     })

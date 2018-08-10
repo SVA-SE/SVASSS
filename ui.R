@@ -8,6 +8,8 @@ if (!require("plotly")) install.packages("plotly")
 require(plotly)
 if (!require("DT")) install.packages("DT")
 require(DT)
+if (!require("shinycssloaders")) install.packages("shinycssloaders")
+require(shinycssloaders)
 
 
 library(shiny)
@@ -61,7 +63,7 @@ shinyUI(navbarPage(
                
                #TAB Summary----
                tabPanel("Summary", value ="#panel_summary",
-                        plotOutput("alarms.per.species"),
+                        plotOutput("alarms.per.species"),#%>% withSpinner(),
                         
                         h4("Select a specific syndrome onthe left, and navigate to detailed information"),
                         tags$a("Go to Specific alarm charts", href = "#panel_alarm_charts"),
