@@ -7,6 +7,60 @@ library(DT)
 
 
 
+# function to be able to decide the number of plots reactively
+#in this case barplots for svaga
+get_plot_output_list <- function(max_plots, barplot.data, weeks, weeks.to.plot) {
+  # Insert plot output objects the list
+  plot_output_list <- lapply(1:max_plots, function(i) {
+    plotname <- paste("plot", i, sep="")
+    plot_output_object <- plotlyOutput(plotname, height = 280, width = 250)
+    plot_output_object <- renderPlotly({
+      
+      data.length = dim(barplot.data)[1]
+      plot.window = (data.length-weeks.to.plot+1):data.length
+      agens = colnames(barplot.data)[i]
+      total.data <- barplot.data[plot.window,i,1]   #(total.data=posit.data+rpois(49,5))
+      pos.data <- barplot.data[plot.window,i,2]     #(posit.data=rpois(49,5))
+      neg.data <- total.data - pos.data  
+      
+      
+      plot_ly(x = weeks[plot.window]) %>% 
+        add_bars(y = pos.data,
+                 name = 'Number of POSITIVE samples', type = 'scatter',
+                 marker = list(color = 'red'))%>%
+        add_bars(y = neg.data,
+                 name = 'Number of tested samples', type = 'scatter',
+                 marker = list(color = 'grey'))%>%
+        layout(title = agens, barmode='stack',
+               paper_bgcolor='rgb(255,255,255)', plot_bgcolor='rgb(229,229,229)',
+               xaxis = list(title = "",
+                            gridcolor = 'rgb(255,255,255)',
+                            showgrid = TRUE,
+                            showline = FALSE,
+                            showticklabels = TRUE,
+                            tickcolor = 'rgb(127,127,127)',
+                            ticks = 'outside',
+                            zeroline = FALSE),
+               yaxis = list(title = "tests per week",
+                            gridcolor = 'rgb(255,255,255)',
+                            showgrid = TRUE,
+                            showline = FALSE,
+                            showticklabels = TRUE,
+                            tickcolor = 'rgb(127,127,127)',
+                            ticks = 'outside',
+                            zeroline = FALSE),
+               legend=list(orientation="h"))    
+      
+      
+      
+      
+    })
+  })
+  
+  do.call(tagList, plot_output_list) # needed to display properly.
+  
+  return(plot_output_list)
+}
 
 
 shinyServer(function(input, output, session) {
@@ -41,7 +95,17 @@ shinyServer(function(input, output, session) {
                         SWI=SWI.weekly,
                         VLT=VLT.weekly)
   
-  
+  svaga.object <- list(CAT=CAT.svaga,
+                       BOV=BOV.svaga,
+                       DOG=DOG.svaga,
+                       ENV=ENV.svaga,
+                       FOD=FOD.svaga,
+                       FSK=FSK.svaga,
+                       EQU=EQU.svaga,
+                       AVI=AVI.svaga,
+                       SRU=SRU.svaga,
+                       SWI=SWI.svaga,
+                       VLT=VLT.svaga)
   
   
   
@@ -223,7 +287,6 @@ shinyServer(function(input, output, session) {
   
   
    output$table <- DT::renderDataTable(DT::datatable(rownames= FALSE,{
-     load(paste0(wd.history,"/classified.species.data.Rdata"))
      
      data <- display.data
      data <- data[data$SPECIES == species.original[as.numeric(input$species)],]
@@ -248,7 +311,58 @@ shinyServer(function(input, output, session) {
   
  
   
-  
+  # svaga ----
+   
+   #figure out which dataset is counting
+   svaga.dataset <- reactive({
+     svaga.object[[as.numeric(input$species)]][[
+       sp.colnames[[as.numeric(input$species)]][as.numeric(input$syndromes)]]]
+   })
+   
+   
+   
+   observe({
+     output$svaga.plots <- renderUI({ get_plot_output_list(dim(svaga.dataset())[2], 
+                                                           svaga.dataset(),
+                                                           ISOweek2date(weekly.object[[as.numeric(input$species)]]@dates[,1]),
+                                                           input$svaga.weeks.slider
+                                                           ) })
+   })
+   
+   
+   
+   
+   # # Insert the right number of plot output objects into the web page
+   #  output$svaga.plots <- renderUI({
+   #   plot_output_list <- lapply(1:(dim(svaga.dataset())[2]), function(i) {
+   #     plotname <- paste("plot", i, sep="")
+   #     plotOutput(plotname, height = 280, width = 250)
+   #   })
+   # 
+   #   # Convert the list to a tagList - this is necessary for the list of items
+   #   # to display properly.
+   #   do.call(tagList, plot_output_list)
+   # })
+   # 
+   # 
+   # for (i in 1:(dim(svaga.dataset())[2])) {
+   #   # Need local so that each item gets its own number. Without it, the value
+   #   # of i in the renderPlot() will be the same across all instances, because
+   #   # of when the expression is evaluated.
+   #   local({
+   #     my_i <- i
+   #     plotname <- paste("plot", my_i, sep="")
+   # 
+   #     output[[plotname]] <- renderPlot({
+   #       barplot(t(svaga.dataset()[,i,]))
+   # 
+   # 
+   #     })
+   #   })
+   # }
+
+
+   
   
   # code to make links between tabs ----
   
@@ -277,7 +391,7 @@ shinyServer(function(input, output, session) {
     # No work to be done if input$tabs and the hash are already the same
     if (hash == input$tabs) return()
     
-    valid <- c("#panel_summary", "#panel_alarm_charts", "#panel_maps","#panel_data")
+    valid <- c("#panel_summary", "#panel_alarm_charts", "#panel_maps","#panel_data","#panel_svaga")
     
     if (hash %in% valid) {
       updateTabsetPanel(session, "tabs", hash)

@@ -206,6 +206,8 @@ load(paste0(wd.history,"classified.species.data.RData"))
     week <- substr(week,1,8)
     display.data <- cbind(display.data,week)
     
+    display.data$PÅVISAD[display.data$PÅVISAD==""]<-"_No SVAGA information"
+    
     
     save(display.data,classified.species.data,file=paste0(wd.history,"/classified.species.data.RData"))
     

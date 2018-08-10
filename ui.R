@@ -13,7 +13,7 @@ require(DT)
 library(shiny)
 
 source("Definitions.r",local=TRUE,encoding="native.enc")
-
+load(paste0(wd.history,"/classified.species.data.Rdata"))
 
 shinyUI(navbarPage(
   theme = shinythemes::shinytheme("united"),  
@@ -70,6 +70,8 @@ shinyUI(navbarPage(
                         br(),
                         tags$a("See the original SVALA data", href = "#panel_data"),
                         br(),
+                        tags$a("See SVAGA data", href = "#panel_svaga"),
+                        br(),
                         h4("True alarms:"),
                         h5("Are alarms from the algorithm that can deal with seasonal effetc (Holt-Winters).
                             The plot shows a bar from 0 to 5, indicating the gravity of outbreak signal detected
@@ -100,6 +102,8 @@ shinyUI(navbarPage(
                         br(),
                         tags$a("See the original SVALA data", href = "#panel_data"),
                         br(),
+                        tags$a("See SVAGA data", href = "#panel_svaga"),
+                        br(),
                         tags$a("Go back to summary", href = "#panel_summary")
                         
                         
@@ -117,6 +121,8 @@ shinyUI(navbarPage(
                         br(),
                         tags$a("See the original SVALA data", href = "#panel_data"),
                         br(),
+                        tags$a("See SVAGA data", href = "#panel_svaga"),
+                        br(),
                         tags$a("Go back to summary", href = "#panel_summary")
                         
                         ),
@@ -125,13 +131,8 @@ shinyUI(navbarPage(
                tabPanel("Data", value ="#panel_data",
                         #row 1 = select data
                         fluidRow(
-                          
-                          column(4,
-                                 uiOutput("week.table")
-                          ),
-                          column(4,
-                                 uiOutput(("pavisad.table"))
-                          )
+                          column(4, uiOutput("week.table")),
+                          column(4, uiOutput("pavisad.table"))
                         ),
                         
                         #row 2 = select columns
@@ -141,7 +142,6 @@ shinyUI(navbarPage(
                                              selected=colnames(display.data),
                                              inline = TRUE)
                         ),
-                        
                         
                         # Create a new row for the table.
                         fluidRow(
@@ -154,9 +154,33 @@ shinyUI(navbarPage(
                         br(),
                         tags$a("Go to MAPS", href = "#panel_maps"),
                         br(),
+                        tags$a("See SVAGA data", href = "#panel_svaga"),
+                        br(),
                         tags$a("Go back to summary", href = "#panel_summary")
                         
-                        )
+                        ),
+               tabPanel("SVAGA", value ="#panel_svaga",
+                        
+                        sliderInput("svaga.weeks.slider", label = h4("Total number of weeks to plot"), min = 10, 
+                                    max = 300, value = 53),
+                        h4("The plot always displays data up to the current week. You can
+                           select the number of historical weeks to include. You can also drag the mouse over the plot 
+                           to select a smaller window to show."),
+                        
+                        uiOutput("svaga.plots"),
+                        #plotOutput("plots"),
+                        
+                        
+                        h4("Change syndrome on the left"),
+                        tags$a("Go to Specific alarm charts", href = "#panel_alarm_charts"),
+                        br(),
+                        tags$a("Go to MAPS", href = "#panel_maps"),
+                        br(),
+                        tags$a("See the original SVALA data", href = "#panel_data"),
+                        br(),
+                        tags$a("Go back to summary", href = "#panel_summary")
+                        
+               )
              )
            )
   ),
