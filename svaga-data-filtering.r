@@ -4,7 +4,7 @@
 for (s in c(sp.colnames[[sp.position]],"Nonspecific")){
   
   
-  non.svaga.object[[sp.position]][[s]]<-CD.species[CD.species$SYNDROMIC==s&CD.species$AGENS=="",]
+  #non.svaga.object[[sp.position]][[s]]<-CD.species[CD.species$SYNDROMIC==s&CD.species$AGENS=="",]
   
   
   CD.syndrome <- CD.species[CD.species$SYNDROMIC==s&CD.species$AGENS!="",

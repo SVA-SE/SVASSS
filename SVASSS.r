@@ -104,18 +104,18 @@ load(paste0(wd.history,"classified.species.data.RData"))
                          SWI=SWI.svaga,
                          VLT=VLT.svaga)
     
-    
-    non.svaga.object <- list(CAT=CAT.non.svaga,
-                          BOV=BOV.non.svaga,
-                          DOG=DOG.non.svaga,
-                          ENV=ENV.non.svaga,
-                          FOD=FOD.non.svaga,
-                          FSK=FSK.non.svaga,
-                          EQU=EQU.non.svaga,
-                          AVI=AVI.non.svaga,
-                          SRU=SRU.non.svaga,
-                          SWI=SWI.non.svaga,
-                          VLT=VLT.non.svaga)
+    # removed 2018-10-08 - already saving all classified data, which is basically what this is.
+    # non.svaga.object <- list(CAT=CAT.non.svaga,
+    #                       BOV=BOV.non.svaga,
+    #                       DOG=DOG.non.svaga,
+    #                       ENV=ENV.non.svaga,
+    #                       FOD=FOD.non.svaga,
+    #                       FSK=FSK.non.svaga,
+    #                       EQU=EQU.non.svaga,
+    #                       AVI=AVI.non.svaga,
+    #                       SRU=SRU.non.svaga,
+    #                       SWI=SWI.non.svaga,
+    #                       VLT=VLT.non.svaga)
 
 
 # define border between historical and new data ----

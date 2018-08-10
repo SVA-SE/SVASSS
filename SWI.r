@@ -44,7 +44,7 @@ dd <- CD.species[CD.species$Doddes==1,]
   
   # save data ----
   assign(paste0(sp.acron,".svaga"),svaga.object[[sp.position]])
-  assign(paste0(sp.acron,".non.svaga"),non.svaga.object[[sp.position]])
+  #assign(paste0(sp.acron,".non.svaga"),non.svaga.object[[sp.position]])
   assign(paste0(sp.acron,".weekly"),weekly.object[[sp.position]])
   assign(paste0(sp.acron,".daily"),daily.object[[sp.position]])
   
@@ -53,6 +53,6 @@ dd <- CD.species[CD.species$Doddes==1,]
                          paste0(sp.acron,'.daily,'),
                          paste0(sp.acron,'.weekly,'),
                          paste0(sp.acron,'.svaga,'),
-                         paste0(sp.acron,'.non.svaga,'),
+                         #paste0(sp.acron,'.non.svaga,'),
                          "file='",
                          paste0(wd.history,sp.acron,".RData'"),")")))
