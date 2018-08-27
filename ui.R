@@ -1,21 +1,13 @@
-if (!require("shiny")) install.packages("shiny")
 require(shiny)
-if (!require("markdown")) install.packages("markdown")
 require(markdown)
-if (!require("shinythemes")) install.packages("shinythemes")
 require(shinythemes)
-if (!require("plotly")) install.packages("plotly")
 require(plotly)
-if (!require("DT")) install.packages("DT")
 require(DT)
-if (!require("shinycssloaders")) install.packages("shinycssloaders")
 require(shinycssloaders)
 
 
-library(shiny)
-
 source("Definitions.r",local=TRUE,encoding="native.enc")
-load(paste0(wd.history,"/classified.species.data.Rdata"))
+load(paste0(shiny.history,"/classified.species.data.Rdata"))
 
 shinyUI(navbarPage(
   theme = shinythemes::shinytheme("united"),  

@@ -1,10 +1,10 @@
 
 
-library(shiny)
-library(plotly)
-library(ISOweek)
-library(DT)
-library(shinycssloaders)
+require(shiny)
+require(plotly)
+require(ISOweek)
+require(DT)
+require(shinycssloaders)
 
 
 
@@ -67,13 +67,13 @@ shinyServer(function(input, output, session) {
   #data imported from outside ----
   source("Definitions.r",local=TRUE,encoding="native.enc")
   
-  load(paste0(wd.history,"/status.RData"))
-  load(paste0(wd.history,"/classified.species.data.Rdata"))
+  load(paste0(shiny.history,"/status.RData"))
+  load(paste0(shiny.history,"/classified.species.data.Rdata"))
   
   
   
   for(species in species.acronyms){
-    eval(parse(text=paste0("load('",wd.history,species,".RData')")))
+    eval(parse(text=paste0("load('",shiny.history,species,".RData')")))
   }
   
   sp.syndromes.names <- lapply(1:length(sp.syndromes), function(x){

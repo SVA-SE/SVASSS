@@ -1,11 +1,20 @@
 PlotDaily=1
 
+## "/media/i/ESS/SVASSS2/"
+
 wd.sourcefiles   <- "I:/ESS/SVASSS2/"
 wd.running       <- "I:/ESS/SVASSS2/SVASSS/"
 wd.history       <- "I:/ESS/SVASSS2/history_files/"
 wd.alarm.reports <- "I:/ESS/SVASSS2/ALARM_reports_PDF/"
 wd.html <- "Z:/SVASSS"
 wd.html.figures <- "Z:/SVASSS/figures"
+
+shiny.sourcefiles <- "/media/i/ESS/SVASSS2/"
+shiny.running       <- "/media/i/ESS/SVASSS2/SVASSS/"
+shiny.history       <- "/media/i/ESS/SVASSS2/history_files/"
+
+
+
 
 #wd.reports <- "I:/ESS/SVASyndromicSurveillanceSystem/regular_reports_PDF"
 #wd.alarm.reports <- "I:/ESS/SVASyndromicSurveillanceSystem/ALARM_reports_PDF/"
