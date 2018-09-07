@@ -209,6 +209,10 @@ load(paste0(wd.history,"classified.species.data.RData"))
     display.data$PÅVISAD[display.data$PÅVISAD==""]<-"_No SVAGA information"
     
     
+    columns.display.data <- colnames(display.data)
+    week.options <- unique(as.character(display.data$week))
+    pavisad.options <- unique(as.character(display.data$PÅVISAD))
+    save(columns.display.data,week.options,pavisad.options,file=paste0(wd.history,"/menu.summaries.RData"))
     save(display.data,classified.species.data,file=paste0(wd.history,"/classified.species.data.RData"))
     
     

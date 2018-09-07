@@ -4,15 +4,27 @@ require(shinythemes)
 require(plotly)
 require(DT)
 require(shinycssloaders)
+#library(shinyjs)
 
 
 source("Definitions.r",local=TRUE,encoding="native.enc")
-load(paste0(shiny.history,"/classified.species.data.Rdata"))
+load(paste0(shiny.history,"/menu.summaries.RData"))
 
 shinyUI(navbarPage(
   theme = shinythemes::shinytheme("united"),  
   "SVASSS",
   
+  # useShinyjs(),
+  # 
+  # div(
+  #   id = "loading_page",
+  #   h1("Loading...")
+  # ),
+  # 
+  # hidden(
+  #   div(
+  #     id = "main_content",
+      
   # tabpanel=Syndromic Surveillance ----
   
   tabPanel("Syndromic Surveillance",
@@ -132,11 +144,11 @@ shinyUI(navbarPage(
                         #row 2 = select columns
                         fluidRow(
                           checkboxGroupInput(inputId="columns.table", label="Select columns to display", 
-                                             choices=colnames(display.data), 
-                                             selected=colnames(display.data),
+                                             choices=columns.display.data, 
+                                             selected=columns.display.data,
                                              inline = TRUE)
                         ),
-                        actionButton("table.go", "after selecting columns, CLICK to generate table"),
+                        actionButton("table.go", "CLICK to generate table (only needed the first time, once generated, updates automatically)"),
                         
                         # Create a new row for the table.
                         fluidRow(
@@ -162,7 +174,7 @@ shinyUI(navbarPage(
                            select the number of historical weeks to include. You can also drag the mouse over the plot 
                            to select a smaller window to show."),
                         
-                        actionButton("svaga.go", "CLICK to generate svaga plots"),
+                        actionButton("svaga.go", "CLICK to generate svaga plots (only needed the first time)"),
                         
                         uiOutput("svaga.plots"),
                         #plotOutput("plots"),
@@ -188,5 +200,8 @@ shinyUI(navbarPage(
   
   #Navbar 3----
   tabPanel("Navbar 3", "This panel is intentionally left blank")
+  
+    
+#  ))
 )
 )

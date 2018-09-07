@@ -5,7 +5,7 @@ library(plotly)
 library(ISOweek)
 library(DT)
 library(shinycssloaders)
-
+library(shinyjs)
 
 
 # function to be able to decide the number of plots reactively
@@ -62,13 +62,36 @@ get_plot_output_list <- function(max_plots, barplot.data, weeks, weeks.to.plot) 
 }
 
 
+# load_data <- function() {
+#   Sys.sleep(2)
+#   hide("loading_page")
+#   show("main_content")
+# }
+
+
+
 shinyServer(function(input, output, session) {
+  
+  # load_data()
   
   #data imported from outside ----
   source("Definitions.r",local=TRUE,encoding="native.enc")
   
   load(paste0(shiny.history,"/status.RData"))
-  load(paste0(shiny.history,"/classified.species.data.Rdata"))
+  load(paste0(shiny.history,"/menu.summaries.RData"))
+  
+  
+  observeEvent({
+    input$svaga.go
+    input$table.go
+    }, {
+  
+      isolate(
+      if (input$svaga.go+input$svaga.go==1){
+        load(paste0(shiny.history,"/classified.species.data.Rdata"))
+      })
+      
+  })
   
   
   
@@ -273,7 +296,7 @@ shinyServer(function(input, output, session) {
     selectInput("week.table",
               "Week:",
               c("All",
-                rev(unique(as.character(display.data$week)))))
+                rev(week.options)))
   })
   
   
@@ -281,7 +304,7 @@ shinyServer(function(input, output, session) {
     selectInput("pavisad.table",
               "Påvisad:",
               c("All",
-                unique(as.character(display.data$PÅVISAD))))
+                pavisad.options))
   })
   
   
