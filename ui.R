@@ -3,7 +3,7 @@ require(markdown)
 require(shinythemes)
 require(plotly)
 require(DT)
-require(shinycssloaders)
+#require(shinycssloaders)
 #library(shinyjs)
 
 

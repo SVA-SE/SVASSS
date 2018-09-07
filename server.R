@@ -4,8 +4,8 @@ library(shiny)
 library(plotly)
 library(ISOweek)
 library(DT)
-library(shinycssloaders)
-library(shinyjs)
+#library(shinycssloaders)
+#library(shinyjs)
 
 
 # function to be able to decide the number of plots reactively
