@@ -322,11 +322,11 @@ shinyServer(function(input, output, session) {
      }
 
           data[,input$columns.table, drop = FALSE]
-   }, options=list(
-     initComplete = JS(
-       "function(settings, json) {",
-       "$(this.api().table().header()).css({'font-size': '80%'});",
-       "}"))
+   }#, options=list(
+    # initComplete = JS(
+    #   "function(settings, json) {",
+    #   "$(this.api().table().header()).css({'font-size': '80%'});",
+    #   "}"))
    )
    %>%
     DT::formatStyle(columns = input$columns.table, fontSize = '80%')

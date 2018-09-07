@@ -235,7 +235,7 @@ load(paste0(wd.history,"classified.species.data.RData"))
                  save(status.true,status.scnd,file=paste0(wd.history,"/status.RData"))
                  
   
-body <- list("please visit <http://webutv/ESS/SVASSS/>")
+body <- list("please visit <http://ubuntu1:3838/sample-apps/SVASSS/>")
 
 
 Emaillist<-"<ESS-alla@sva.se>"

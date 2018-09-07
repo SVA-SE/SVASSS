@@ -195,11 +195,11 @@ shinyUI(navbarPage(
   ),
   
   #Navbar 2----
-  tabPanel("Active Surveillance", "This panel is intentionally left blank"),
+  tabPanel("Active Surveillance", "This panel is intentionally left blank")
   
   
   #Navbar 3----
-  tabPanel("Navbar 3", "This panel is intentionally left blank")
+  #tabPanel("Navbar 3", "This panel is intentionally left blank")
   
     
 #  ))
