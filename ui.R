@@ -136,6 +136,7 @@ shinyUI(navbarPage(
                                              selected=colnames(display.data),
                                              inline = TRUE)
                         ),
+                        actionButton("table.go", "after selecting columns, CLICK to generate table"),
                         
                         # Create a new row for the table.
                         fluidRow(
@@ -160,6 +161,8 @@ shinyUI(navbarPage(
                         h4("The plot always displays data up to the current week. You can
                            select the number of historical weeks to include. You can also drag the mouse over the plot 
                            to select a smaller window to show."),
+                        
+                        actionButton("svaga.go", "CLICK to generate svaga plots"),
                         
                         uiOutput("svaga.plots"),
                         #plotOutput("plots"),

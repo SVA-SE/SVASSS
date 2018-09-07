@@ -1,10 +1,10 @@
 
 
-require(shiny)
-require(plotly)
-require(ISOweek)
-require(DT)
-require(shinycssloaders)
+library(shiny)
+library(plotly)
+library(ISOweek)
+library(DT)
+library(shinycssloaders)
 
 
 
@@ -285,7 +285,8 @@ shinyServer(function(input, output, session) {
   })
   
   
-   output$table <- DT::renderDataTable(DT::datatable(rownames= FALSE,{
+  observeEvent(input$table.go, {
+    output$table <- DT::renderDataTable(DT::datatable(rownames= FALSE,{
      
      data <- display.data
      data <- data[data$SPECIES == species.original[as.numeric(input$species)],]
@@ -307,6 +308,7 @@ shinyServer(function(input, output, session) {
    %>%
     DT::formatStyle(columns = input$columns.table, fontSize = '80%')
    )
+  })
   
  
   
@@ -320,7 +322,7 @@ shinyServer(function(input, output, session) {
    
    
    
-   observe({
+   observeEvent(input$svaga.go, {
      output$svaga.plots <- renderUI({ get_plot_output_list(dim(svaga.dataset())[2], 
                                                            svaga.dataset(),
                                                            ISOweek2date(weekly.object[[as.numeric(input$species)]]@dates[,1]),
