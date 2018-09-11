@@ -18,8 +18,6 @@ shiny.history       <- paste0(shiny.sourcefiles,"history_files/")
 
 
 
-
-
 #wd.reports <- "I:/ESS/SVASyndromicSurveillanceSystem/regular_reports_PDF"
 #wd.alarm.reports <- "I:/ESS/SVASyndromicSurveillanceSystem/ALARM_reports_PDF/"
 #wd.files   <- "I:/ESS/SVASyndromicSurveillanceSystem/history_files/"
