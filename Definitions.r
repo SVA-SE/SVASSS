@@ -9,9 +9,13 @@ wd.alarm.reports <- "I:/ESS/SVASSS2/ALARM_reports_PDF/"
 wd.html <- "Z:/SVASSS"
 wd.html.figures <- "Z:/SVASSS/figures"
 
-shiny.sourcefiles <- "/media/i/ESS/SVASSS2/"
-shiny.running       <- "/media/i/ESS/SVASSS2/SVASSS/"
-shiny.history       <- "/media/i/ESS/SVASSS2/history_files/" #/media/i/ESS/SVASSS2/history_files/
+
+run.local=F
+
+shiny.sourcefiles <- ifelse(run.local==T,"I:/ESS/SVASSS2/","/media/i/ESS/SVASSS2/")
+shiny.running       <- paste0(shiny.sourcefiles,"SVASSS/")
+shiny.history       <- paste0(shiny.sourcefiles,"history_files/")
+
 
 
 

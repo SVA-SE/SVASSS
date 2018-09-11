@@ -3,7 +3,9 @@ require(markdown)
 require(shinythemes)
 require(plotly)
 require(DT)
+library(bindrcpp)
 #require(shinycssloaders)
+#library(magrittr)
 #library(shinyjs)
 
 

@@ -213,7 +213,8 @@ load(paste0(wd.history,"classified.species.data.RData"))
     week.options <- unique(as.character(display.data$week))
     pavisad.options <- unique(as.character(display.data$PÅVISAD))
     save(columns.display.data,week.options,pavisad.options,file=paste0(wd.history,"/menu.summaries.RData"))
-    save(display.data,classified.species.data,file=paste0(wd.history,"/classified.species.data.RData"))
+    save(classified.species.data,file=paste0(wd.history,"/classified.species.data.RData"))
+    save(display.data,file=paste0(wd.history,"/display.data.RData"))
     
     
   

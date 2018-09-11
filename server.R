@@ -4,7 +4,9 @@ library(shiny)
 library(plotly)
 library(ISOweek)
 library(DT)
+library(bindrcpp)
 #library(shinycssloaders)
+#library(magrittr)
 #library(shinyjs)
 
 
@@ -81,17 +83,7 @@ shinyServer(function(input, output, session) {
   load(paste0(shiny.history,"/menu.summaries.RData"))
   
   
-  observeEvent({
-    input$svaga.go
-    input$table.go
-    }, {
   
-      isolate(
-      if (input$svaga.go+input$svaga.go==1){
-        load(paste0(shiny.history,"/classified.species.data.Rdata"))
-      })
-      
-  })
   
   
   
@@ -292,6 +284,8 @@ shinyServer(function(input, output, session) {
   
   # data table tab ----
   
+  
+  
   output$week.table <- renderUI({
     selectInput("week.table",
               "Week:",
@@ -306,6 +300,24 @@ shinyServer(function(input, output, session) {
               c("All",
                 pavisad.options))
   })
+  
+  
+  observeEvent({
+    #input$svaga.go
+    input$table.go
+  }, {
+    
+    isolate(
+    if (input$svaga.go==1){
+    load(paste0(shiny.history,"/display.data.Rdata"))
+      
+    }
+    )
+    
+  })
+  
+  
+  
   
   
   observeEvent(input$table.go, {
@@ -330,7 +342,7 @@ shinyServer(function(input, output, session) {
    )
    %>%
     DT::formatStyle(columns = input$columns.table, fontSize = '80%')
-   )
+   )#%>% withSpinner()
   })
   
  
