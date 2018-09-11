@@ -272,115 +272,142 @@ if (sum(status.true,na.rm=TRUE)==0&sum(status.scnd,na.rm=TRUE)==0)({
 
 # index/main html ---- 
 
-
-setwd(wd.html)
-
-html <- file("index.html", "w+")
-
-cat("<html>\n", file=html)
-cat("<head>\n", file=html)
-cat(sprintf("<title>%s</title>\n", "SVASS"), file=html)
-cat("</head>\n", file=html)
-
-cat("<frameset cols=\"150px,*\">\n", file=html)
-cat("<frame noresize=\"noresize\" src=\"nav.html\" name=\"nav\"/>\n", file=html)
-cat("<frame noresize=\"noresize\" src=\"main.html\" name=\"main\"/>\n", file=html)
-cat("</frameset>\n", file=html)
-
-cat("</html>\n", file=html)
-
-close(html)
-
-
-
-html <- file("main.html", "w+")
-
-cat("<html>\n", file=html)
-cat("<head>\n", file=html)
-cat(sprintf("<title>%s</title>\n", "SVASS main page"), file=html)
-cat("</head>\n", file=html)
-
-cat("<body>\n", file=html)
-
-cat(sprintf('<h1 align="center">%s</h1>\n', "Syndromic surveillance at SVA"), file=html)
-cat(sprintf('<h1 align="center">%s</h1>\n', Sys.Date()), file=html)
-cat(sprintf('<h2 align="center">%s</h2>\n', "Select a group on the navigation menu to the left to see results"), file=html)
-
-cat("<TABLE border=\"0\" align=\"center\">\n", file=html)
-cat("<tr>\n", file=html)
-cat("<td>System outputs are based on data up to the end of the PREVIOUS WEEK</td>\n", file=html)
-cat("</tr>\n", file=html)
-
-cat("<tr>\n", file=html)
-cat("<td>Number of events per week correspond to the number of laboratory submissions, classified into syndromic groups by a computer system. </td>\n", file=html)
-cat("</tr>\n", file=html)
-
-cat("<tr>\n", file=html)
-cat("<td> They reflect the number of ANIMALS tested per day for CATS and DOGS, and the number of HERDS otherwise</td>\n", file=html)
-cat("</tr>\n", file=html)
-
-
-cat("<tr>\n", file=html)
-cat("<td>For questions contact Fernanda Dorea (fernanda.dorea@sva.se)</td>\n", file=html)
-cat("</tr>\n", file=html)
-
-
-cat("</table>  \n", file=html)
-cat("</p>\n", file=html)
-
-
-
-cat("<hr/>\n", file=html)
-
-#    cat("<p align=\"center\">\n", file=html)
-#    cat("<img src=\"summary.png\"/>\n", file=html)
-#    cat("</p>\n", file=html)
-#
-cat("</body>\n", file=html)
-
-cat("</html>\n", file=html)
-
-close(html)
-
-
-
-
-
-html <- file('nav.html', "w+")
-
-cat("<html>\n", file=html)
-cat("<head>\n", file=html)
-cat(sprintf("<title>%s</title>\n", "SVASS menu"), file=html)
-cat("</head>\n", file=html)
-
-cat("<body>\n", file=html)
-
-# Create navigation.
-cat("<table border=0>\n", file=html)
-
-cat("<tr>", file=html)
-cat("<td colspan=3><a href=\"main.html\" target=\"main\">Main page</a></td>\n", file=html)
-cat("</tr>\n", file=html)
-cat("<tr>", file=html)
-cat("<td colspan=3><a href=\"help.pdf\" target=\"main\">HELP</a></td>\n", file=html)
-cat("</tr>\n", file=html)
-
-
-cat("<tr><td colspan=3>&nbsp;</td></tr>\n", file=html)
-
-
-#on 2018-05-23 SVASSS was converted to WEEKLY only and always
-#daily analysis are still ran and recorded, so that we can always revert,
-#but they generate no emails or html output
+#2018-09-11 deactivated html, shiny workign now
+# setwd(wd.html)
+# 
+# html <- file("index.html", "w+")
+# 
+# cat("<html>\n", file=html)
+# cat("<head>\n", file=html)
+# cat(sprintf("<title>%s</title>\n", "SVASS"), file=html)
+# cat("</head>\n", file=html)
+# 
+# cat("<frameset cols=\"150px,*\">\n", file=html)
+# cat("<frame noresize=\"noresize\" src=\"nav.html\" name=\"nav\"/>\n", file=html)
+# cat("<frame noresize=\"noresize\" src=\"main.html\" name=\"main\"/>\n", file=html)
+# cat("</frameset>\n", file=html)
+# 
+# cat("</html>\n", file=html)
+# 
+# close(html)
+# 
+# 
+# 
+# html <- file("main.html", "w+")
+# 
+# cat("<html>\n", file=html)
+# cat("<head>\n", file=html)
+# cat(sprintf("<title>%s</title>\n", "SVASS main page"), file=html)
+# cat("</head>\n", file=html)
+# 
+# cat("<body>\n", file=html)
+# 
+# cat(sprintf('<h1 align="center">%s</h1>\n', "Syndromic surveillance at SVA"), file=html)
+# cat(sprintf('<h1 align="center">%s</h1>\n', Sys.Date()), file=html)
+# cat(sprintf('<h2 align="center">%s</h2>\n', "Select a group on the navigation menu to the left to see results"), file=html)
+# 
+# cat("<TABLE border=\"0\" align=\"center\">\n", file=html)
+# cat("<tr>\n", file=html)
+# cat("<td>System outputs are based on data up to the end of the PREVIOUS WEEK</td>\n", file=html)
+# cat("</tr>\n", file=html)
+# 
+# cat("<tr>\n", file=html)
+# cat("<td>Number of events per week correspond to the number of laboratory submissions, classified into syndromic groups by a computer system. </td>\n", file=html)
+# cat("</tr>\n", file=html)
+# 
+# cat("<tr>\n", file=html)
+# cat("<td> They reflect the number of ANIMALS tested per day for CATS and DOGS, and the number of HERDS otherwise</td>\n", file=html)
+# cat("</tr>\n", file=html)
+# 
+# 
+# cat("<tr>\n", file=html)
+# cat("<td>For questions contact Fernanda Dorea (fernanda.dorea@sva.se)</td>\n", file=html)
+# cat("</tr>\n", file=html)
+# 
+# 
+# cat("</table>  \n", file=html)
+# cat("</p>\n", file=html)
+# 
+# 
+# 
+# cat("<hr/>\n", file=html)
+# 
+# #    cat("<p align=\"center\">\n", file=html)
+# #    cat("<img src=\"summary.png\"/>\n", file=html)
+# #    cat("</p>\n", file=html)
+# #
+# cat("</body>\n", file=html)
+# 
+# cat("</html>\n", file=html)
+# 
+# close(html)
+# 
+# 
+# 
+# 
+# 
+# html <- file('nav.html', "w+")
+# 
+# cat("<html>\n", file=html)
+# cat("<head>\n", file=html)
+# cat(sprintf("<title>%s</title>\n", "SVASS menu"), file=html)
+# cat("</head>\n", file=html)
+# 
+# cat("<body>\n", file=html)
+# 
+# # Create navigation.
+# cat("<table border=0>\n", file=html)
+# 
+# cat("<tr>", file=html)
+# cat("<td colspan=3><a href=\"main.html\" target=\"main\">Main page</a></td>\n", file=html)
+# cat("</tr>\n", file=html)
+# cat("<tr>", file=html)
+# cat("<td colspan=3><a href=\"help.pdf\" target=\"main\">HELP</a></td>\n", file=html)
+# cat("</tr>\n", file=html)
+# 
+# 
+# cat("<tr><td colspan=3>&nbsp;</td></tr>\n", file=html)
+# 
+# 
+# #on 2018-05-23 SVASSS was converted to WEEKLY only and always
+# #daily analysis are still ran and recorded, so that we can always revert,
+# #but they generate no emails or html output
+# # for(species in 1:length(species.acronyms)) {
+# #   cat("<tr>", file=html)
+# #   
+# #   cat("<td>&nbsp;</td>", file=html)
+# #   
+# #   if(sapply(true.alarms.daily,sum,na.rm=TRUE)[species]>0) {
+# #     cat("<td bgcolor='red'>", file=html)
+# #   } else {
+# #     if(sapply(scnd.alarms.daily,sum,na.rm=TRUE)[species]>0){
+# #       cat("<td bgcolor='yellow'>", file=html)
+# #     } else{
+# #       cat("<td bgcolor='springgreen'>", file=html)
+# #     }
+# #   }
+# #   
+# #   cat("&nbsp;&nbsp;&nbsp;&nbsp;</td>", file=html)
+# #   
+# #   cat(sprintf("<td><a href=\"%s.html\" target=\"main\">%s</a></td>", 
+# #               paste0("html/",species.acronyms[species]), species.names[species]), file=html)
+# #   
+# #   cat("</tr>\n", file=html)
+# #   
+# # }
+# 
+# 
+# 
 # for(species in 1:length(species.acronyms)) {
 #   cat("<tr>", file=html)
 #   
 #   cat("<td>&nbsp;</td>", file=html)
 #   
-#   if(sapply(true.alarms.daily,sum,na.rm=TRUE)[species]>0) {
+#   
+#   if(sapply(true.alarms.weekly,sum,na.rm=TRUE)[species]>0) {
 #     cat("<td bgcolor='red'>", file=html)
 #   } else {
-#     if(sapply(scnd.alarms.daily,sum,na.rm=TRUE)[species]>0){
+#     if(sapply(scnd.alarms.weekly,sum,na.rm=TRUE)[species]>0){
 #       cat("<td bgcolor='yellow'>", file=html)
 #     } else{
 #       cat("<td bgcolor='springgreen'>", file=html)
@@ -390,52 +417,25 @@ cat("<tr><td colspan=3>&nbsp;</td></tr>\n", file=html)
 #   cat("&nbsp;&nbsp;&nbsp;&nbsp;</td>", file=html)
 #   
 #   cat(sprintf("<td><a href=\"%s.html\" target=\"main\">%s</a></td>", 
-#               paste0("html/",species.acronyms[species]), species.names[species]), file=html)
+#               paste0("html/",species.acronyms[species]), 
+#               species.names[species]), file=html)
 #   
 #   cat("</tr>\n", file=html)
 #   
 # }
-
-
-
-for(species in 1:length(species.acronyms)) {
-  cat("<tr>", file=html)
-  
-  cat("<td>&nbsp;</td>", file=html)
-  
-  
-  if(sapply(true.alarms.weekly,sum,na.rm=TRUE)[species]>0) {
-    cat("<td bgcolor='red'>", file=html)
-  } else {
-    if(sapply(scnd.alarms.weekly,sum,na.rm=TRUE)[species]>0){
-      cat("<td bgcolor='yellow'>", file=html)
-    } else{
-      cat("<td bgcolor='springgreen'>", file=html)
-    }
-  }
-  
-  cat("&nbsp;&nbsp;&nbsp;&nbsp;</td>", file=html)
-  
-  cat(sprintf("<td><a href=\"%s.html\" target=\"main\">%s</a></td>", 
-              paste0("html/",species.acronyms[species]), 
-              species.names[species]), file=html)
-  
-  cat("</tr>\n", file=html)
-  
-}
-
-
-
-cat("</table>\n\n", file=html)
-
-cat("</body>\n", file=html)
-
-cat("</html>\n", file=html)
-
-close(html)
-
-
-
-
-
-
+# 
+# 
+# 
+# cat("</table>\n\n", file=html)
+# 
+# cat("</body>\n", file=html)
+# 
+# cat("</html>\n", file=html)
+# 
+# close(html)
+# 
+# 
+# 
+# 
+# 
+# 

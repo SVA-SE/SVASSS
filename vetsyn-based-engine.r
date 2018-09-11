@@ -318,7 +318,8 @@ if (weekly&
 
 # html page ----
 
-setwd(wd.html)
+#on 2018-09-11 Old html deactivated, since shiny now working
+#setwd(wd.html)
 
 #on 2018-05-23 SVASSS was converted to WEEKLY only and always
 #daily analysis are still ran and recorded, so that we can always revert,
@@ -348,29 +349,29 @@ setwd(wd.html)
 #                arrow.colors=c("green","orange","tomato","red"))
 # }
 
-if(weekly){
-  syndromic_page(x=weekly.object[[sp.position]],
-                 tpoints.display=2,
-                 syndromes=sp.all.syndromes[[sp.position]],
-                 pretty.labels=sp.syndromes[[sp.position]][sp.all.syndromes[[sp.position]]],
-                 window=60,
-                 baseline=TRUE,
-                 UCL=1,
-                 algorithms=c(1,2),
-                 limit=3,
-                 file.name=sp.acron,
-                 title=paste("Weekly report of syndromes in",sp.label, (new.data.end),sep=" "),
-                 data.page=TRUE,
-                 data=CD.species,
-                 date.format="%d/%m/%Y",
-                 dates.var="ANKOMSTDATUM",
-                 syndromes.var="SYNDROMIC",
-                 color.null="F8F8FF",
-                 color.low="F8FF2F",
-                 color.alarm="FF0000",
-                 scale=10, 
-                 fill.colors=c("yellow2","orange","tomato"),
-                 arrow.colors=c("green","orange","tomato","red"))
-}
-
-setwd(wd.running)
+# if(weekly){
+#   syndromic_page(x=weekly.object[[sp.position]],
+#                  tpoints.display=2,
+#                  syndromes=sp.all.syndromes[[sp.position]],
+#                  pretty.labels=sp.syndromes[[sp.position]][sp.all.syndromes[[sp.position]]],
+#                  window=60,
+#                  baseline=TRUE,
+#                  UCL=1,
+#                  algorithms=c(1,2),
+#                  limit=3,
+#                  file.name=sp.acron,
+#                  title=paste("Weekly report of syndromes in",sp.label, (new.data.end),sep=" "),
+#                  data.page=TRUE,
+#                  data=CD.species,
+#                  date.format="%d/%m/%Y",
+#                  dates.var="ANKOMSTDATUM",
+#                  syndromes.var="SYNDROMIC",
+#                  color.null="F8F8FF",
+#                  color.low="F8FF2F",
+#                  color.alarm="FF0000",
+#                  scale=10, 
+#                  fill.colors=c("yellow2","orange","tomato"),
+#                  arrow.colors=c("green","orange","tomato","red"))
+# }
+# 
+ setwd(wd.running)
