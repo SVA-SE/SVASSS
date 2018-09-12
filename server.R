@@ -328,7 +328,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  observeEvent(input$table.go, {
+  #observeEvent(input$table.go, {
   
     output$table <- DT::renderDataTable(DT::datatable(rownames= FALSE,{
      
@@ -350,7 +350,8 @@ shinyServer(function(input, output, session) {
    %>%
     DT::formatStyle(columns = input$columns.table, fontSize = '80%')
    )#%>% withSpinner()
-  })
+  
+    #})
   
  
   
