@@ -322,11 +322,11 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$table.go, {
     
-    isolate(
-        if (input$svaga.go==1){
+    #isolate(
+    #    if (input$svaga.go==1){
         load(paste0(shiny.history,"/display.data.Rdata"))
-        }
-        )
+    #    }
+     #   )
       
     display.data.r <- reactive({
       display.data[(display.data$SPECIES == species.original[as.numeric(input$species)])&
