@@ -9,7 +9,7 @@ library(bindrcpp)
 #library(magrittr)
 #library(shinyjs)
 
-options(encoding = 'ISO8859-1')
+
 
 # function to be able to decide the number of plots reactively
 #in this case barplots for svaga
@@ -65,12 +65,21 @@ get_plot_output_list <- function(max_plots, barplot.data, weeks, weeks.to.plot) 
 }
 
 
-# load_data <- function() {
-#   Sys.sleep(2)
-#   hide("loading_page")
-#   show("main_content")
-# }
-
+fix.encoding <- function(df, originalEncoding = "UTF-8") {
+  numCols <- ncol(df)
+  df <- data.frame(df)
+  for (col in 1:numCols)
+  {
+    if(class(df[, col]) == "character"){
+      Encoding(df[, col]) <- originalEncoding
+    }
+    
+    if(class(df[, col]) == "factor"){
+      Encoding(levels(df[, col])) <- originalEncoding
+    }
+  }
+  return(as_data_frame(df))
+}
 
 
 shinyServer(function(input, output, session) {
@@ -82,9 +91,6 @@ shinyServer(function(input, output, session) {
   
   load(paste0(shiny.history,"/status.RData"))
   load(paste0(shiny.history,"/menu.summaries.RData"))
-  
-  
-  
   
   
   
@@ -299,7 +305,7 @@ shinyServer(function(input, output, session) {
     selectInput("pavisad.table",
               "Påvisad:",
               c("All",
-                pavisad.options))
+                enc2native(pavisad.options)))
   })
   
   
@@ -332,6 +338,10 @@ shinyServer(function(input, output, session) {
     display.data.r <- reactive({
       req(input$table.go)
       load(paste0(shiny.history,"/display.data.Rdata"))
+      
+      fix.encoding(display.data)
+      
+      
       display.data[(display.data$SPECIES == species.original[as.numeric(input$species)])&
                     (display.data$SYNDROMIC == sp.colnames[[as.numeric(input$species)]][as.numeric(input$syndromes)]) ,]
     })
