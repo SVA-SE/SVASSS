@@ -301,7 +301,7 @@ shinyServer(function(input, output, session) {
                 pavisad.options))
   })
   
-  # 
+  
   # observeEvent({
   #   #input$svaga.go
   #   input$table.go
@@ -315,17 +315,29 @@ shinyServer(function(input, output, session) {
   #   )
   #   
   # })
-  # 
-  # 
-  # 
+  
+  
+  
   
   
   observeEvent(input$table.go, {
+    
+    isolate(
+        if (input$svaga.go==1){
+        load(paste0(shiny.history,"/display.data.Rdata"))
+        }
+        )
+      
+    display.data.r <- reactive({
+      display.data[(display.data$SPECIES == species.original[as.numeric(input$species)])&
+                    (display.data$SYNDROMIC == sp.colnames[[as.numeric(input$species)]][as.numeric(input$syndromes)]) ,]
+    })
+    
+    
+    
     output$table <- DT::renderDataTable(DT::datatable(rownames= FALSE,{
-      load(paste0(shiny.history,"/display.data.Rdata"))
-     data <- display.data
-     data <- data[data$SPECIES == species.original[as.numeric(input$species)],]
-     data <- data[data$SYNDROMIC == sp.colnames[[as.numeric(input$species)]][as.numeric(input$syndromes)],]
+     
+     data <- display.data.r()
      if (input$week.table != "All") {
        data <- data[data$week == input$week.table,]
      }
