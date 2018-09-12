@@ -150,7 +150,7 @@ shinyUI(navbarPage(
                                              selected=columns.display.data,
                                              inline = TRUE)
                         ),
-                        #actionButton("table.go", "CLICK to generate table (only needed the first time, once generated, updates automatically)"),
+                        actionButton("table.go", "CLICK to generate table (only needed the first time, once generated, updates automatically)"),
                         
                         # Create a new row for the table.
                         fluidRow(
