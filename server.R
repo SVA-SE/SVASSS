@@ -83,11 +83,7 @@ shinyServer(function(input, output, session) {
   load(paste0(shiny.history,"/menu.summaries.RData"))
   
   
-  #isolate(
-  #if (input$svaga.go==1){
-    load(paste0(shiny.history,"/display.data.Rdata"))
-  #}
-  #    )
+  
   
   
   
@@ -322,14 +318,23 @@ shinyServer(function(input, output, session) {
   
   
   
-  display.data.r <- reactive({
-    display.data[(display.data$SPECIES == species.original[as.numeric(input$species)])&
-                   (display.data$SYNDROMIC == sp.colnames[[as.numeric(input$species)]][as.numeric(input$syndromes)]) ,]
-  })
   
   
   observeEvent(input$table.go, {
-  
+    
+    isolate(
+        if (input$svaga.go==1){
+        load(paste0(shiny.history,"/display.data.Rdata"))
+        }
+        )
+      
+    display.data.r <- reactive({
+      display.data[(display.data$SPECIES == species.original[as.numeric(input$species)])&
+                    (display.data$SYNDROMIC == sp.colnames[[as.numeric(input$species)]][as.numeric(input$syndromes)]) ,]
+    })
+    
+    
+    
     output$table <- DT::renderDataTable(DT::datatable(rownames= FALSE,{
      
      data <- display.data.r()
