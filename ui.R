@@ -4,7 +4,7 @@ require(shinythemes)
 require(plotly)
 require(DT)
 library(bindrcpp)
-require(shinycssloaders)
+#require(shinycssloaders)
 #library(magrittr)
 #library(shinyjs)
 
@@ -154,7 +154,7 @@ shinyUI(navbarPage(
                         
                         # Create a new row for the table.
                         fluidRow(
-                          withSpinner(DT::dataTableOutput("table"))
+                          DT::dataTableOutput("table")
                         ),
                         
                         

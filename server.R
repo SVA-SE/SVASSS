@@ -5,7 +5,7 @@ library(plotly)
 library(ISOweek)
 library(DT)
 library(bindrcpp)
-library(shinycssloaders)
+#library(shinycssloaders)
 #library(magrittr)
 #library(shinyjs)
 
