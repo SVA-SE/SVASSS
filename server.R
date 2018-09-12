@@ -305,7 +305,7 @@ shinyServer(function(input, output, session) {
     selectInput("pavisad.table",
               "Påvisad:",
               c("All",
-                enc2utf8(pavisad.options)))
+                pavisad.options))#enc2utf8(pavisad.options)))
   })
   
   
