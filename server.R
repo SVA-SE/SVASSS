@@ -9,6 +9,7 @@ library(bindrcpp)
 #library(magrittr)
 #library(shinyjs)
 
+options(encoding = 'ISO8859-1')
 
 # function to be able to decide the number of plots reactively
 #in this case barplots for svaga

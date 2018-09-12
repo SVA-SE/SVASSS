@@ -210,6 +210,12 @@ load(paste0(wd.history,"classified.species.data.RData"))
     
     
     columns.display.data <- colnames(display.data)
+    columns.display.data <- str_replace(columns.display.data,"Ö","O")
+    columns.display.data <- str_replace(columns.display.data,"Ä","A")
+    columns.display.data <- str_replace(columns.display.data,"Å","A")
+    
+    colnames(display.data) <- columns.display.data
+  
     week.options <- unique(as.character(display.data$week))
     pavisad.options <- unique(as.character(display.data$PÅVISAD))
     save(columns.display.data,week.options,pavisad.options,file=paste0(wd.history,"/menu.summaries.RData"))
