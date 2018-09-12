@@ -301,28 +301,28 @@ shinyServer(function(input, output, session) {
                 pavisad.options))
   })
   
-  
-  observeEvent({
-    #input$svaga.go
-    input$table.go
-  }, {
-    
-    isolate(
-    if (input$svaga.go==1){
-    load(paste0(shiny.history,"/display.data.Rdata"))
-      
-    }
-    )
-    
-  })
-  
-  
-  
+  # 
+  # observeEvent({
+  #   #input$svaga.go
+  #   input$table.go
+  # }, {
+  #   
+  #   isolate(
+  #   if (input$svaga.go==1){
+  #   load(paste0(shiny.history,"/display.data.Rdata"))
+  #     
+  #   }
+  #   )
+  #   
+  # })
+  # 
+  # 
+  # 
   
   
   observeEvent(input$table.go, {
     output$table <- DT::renderDataTable(DT::datatable(rownames= FALSE,{
-     
+      load(paste0(shiny.history,"/display.data.Rdata"))
      data <- display.data
      data <- data[data$SPECIES == species.original[as.numeric(input$species)],]
      data <- data[data$SYNDROMIC == sp.colnames[[as.numeric(input$species)]][as.numeric(input$syndromes)],]
