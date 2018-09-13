@@ -206,27 +206,18 @@ load(paste0(wd.history,"classified.species.data.RData"))
     week <- substr(week,1,8)
     display.data <- cbind(display.data,week)
     
+    display.data$PÅVISAD[display.data$PÅVISAD==""]<-"_No SVAGA information"
     
-    #brute force removaf Swedish characters, after I could not force encoding, 
-    #and UTF-encoding was giving worse results 2018-09-12
-    columns.display.data<-     eliminate.swedish(colnames(display.data))
+    
+    columns.display.data <- colnames(display.data)
+    columns.display.data <- str_replace(columns.display.data,"Ö","O")
+    columns.display.data <- str_replace(columns.display.data,"Ä","A")
+    columns.display.data <- str_replace(columns.display.data,"Å","A")
+    
     colnames(display.data) <- columns.display.data
-    
-    display.data$PAVISAD[display.data$PAVISAD==""]<-"_No SVAGA information"
-    
-    
-    character.columns <- c("OVERORDNATUPPDRAG","PROVTAGNINGSORSAK", "DIAGNOSER", "RESULTATUNDERSOKNING",
-                           "RESULTATANALYS","PAVISAD","ANALYSBESKRIVNING","ANALYSMATERIAL","UNDERSOKNINGBESKRIVNING",
-                           "MATERIAL")
-    
-    for (col in character.columns){
-      display.data[,col]<- eliminate.swedish(display.data[,col])
-    }
-    
-    
   
     week.options <- unique(as.character(display.data$week))
-    pavisad.options <- unique(as.character(display.data$PAVISAD))
+    pavisad.options <- unique(as.character(display.data$PÅVISAD))
     save(columns.display.data,week.options,pavisad.options,file=paste0(wd.history,"/menu.summaries.RData"))
     save(classified.species.data,file=paste0(wd.history,"/classified.species.data.RData"))
     save(display.data,file=paste0(wd.history,"/display.data.RData"))

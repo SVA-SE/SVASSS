@@ -259,12 +259,3 @@ sp.weekly.ewma.thresholds <- list(
 )
 
 
-eliminate.swedish <- function(x){
-  x<- str_replace(x,"Ö","O")
-  x<- str_replace(x,"Ä","A")
-  x<- str_replace(x,"Å","A")
-  x<- str_replace(x,"ö","o")
-  x<- str_replace(x,"ä","a")
-  x<- str_replace(x,"å","a")
-  return(x)
-}
