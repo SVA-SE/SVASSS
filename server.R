@@ -339,7 +339,7 @@ shinyServer(function(input, output, session) {
       req(input$table.go)
       load(paste0(shiny.history,"/display.data.Rdata"))
       
-      display.data <- fix.encoding(display.data)
+      fix.encoding(display.data)
       
       
       display.data[(display.data$SPECIES == species.original[as.numeric(input$species)])&
