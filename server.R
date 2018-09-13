@@ -305,7 +305,7 @@ shinyServer(function(input, output, session) {
     selectInput("pavisad.table",
               "Påvisad:",
               c("All",
-                enc2native(pavisad.options)))
+                pavisad.options))
   })
   
   
@@ -356,7 +356,7 @@ shinyServer(function(input, output, session) {
        data <- data[data$week == input$week.table,]
      }
      if (input$pavisad.table != "All") {
-       data <- data[data$PÅVISAD == input$pavisad.table,]
+       data <- data[data$PAVISAD == input$pavisad.table,]
      }
 
           data[,input$columns.table, drop = FALSE]
