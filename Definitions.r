@@ -44,11 +44,11 @@ species.original=c("Cat","Cattle","Dog","Environment","FOD","FSK",
 
 #syndrome names as they appear in the result of classification algorithms (SYNDROMIC columns in SVASSS)
 syndromes.labels = c("Abortion", "CHH","EEO","Integumentary", "GIT", 
-                   "MBS", "Mastitis", "Musculoskeletal","Nervous","Reproductive",
-                   "Respiratory","Systemic","Urinary","AntimResistance", "Doddes")
+                     "MBS", "Mastitis", "Musculoskeletal","Nervous","Reproductive",
+                     "Respiratory","Systemic","Urinary","AntimResistance", "Doddes")
 syndromes.names = c("Abortion", "Circ.Haematop.Hepatic","Eyes-Ears-Others","Integumentary", "GIT", 
-                          "MBS", "Mastitis", "Musculoskeletal","Nervous","Reproductive",
-                          "Respiratory","Systemic","Urinary","AntimResistance", "Fallen Stock")
+                    "MBS", "Mastitis", "Musculoskeletal","Nervous","Reproductive",
+                    "Respiratory","Systemic","Urinary","AntimResistance", "Fallen Stock")
 
 
 
@@ -93,12 +93,12 @@ hw.limits   <- c(1.3,1.645,3,3.5,4)
 
 guard.band <- 5
 baseline.window <- 520
-  #cdb.baseline.window <- 730
-  #baseline.window.DF <- 65
-  #cdb.baseline.window.DF <- 92
+#cdb.baseline.window <- 730
+#baseline.window.DF <- 65
+#cdb.baseline.window.DF <- 92
 lambda=0.4
 nahead <- 5
-  cdb.nahead=7
+cdb.nahead=7
 value.if.alarm <-2
 
 baseline.window.week <-104
@@ -168,9 +168,9 @@ sp.daily.formulas <- list(
            NA,y~dow+sin+cos,NA,y~dow+sin+cos,y~dow+sin+cos),
   AVI=NA,
   SRU=list(NA,NA,NA,NA,NA,NA,NA,NA,y~dow+sin+cos,NA,
-        NA,NA,NA,NA,y~dow+sin+cos),
+           NA,NA,NA,NA,y~dow+sin+cos),
   SWI=list(NA,NA,NA,NA,NA,NA,NA,y~dow+sin+cos,NA,NA,
-        NA,NA,NA,NA,NA,NA,NA,NA,NA),
+           NA,NA,NA,NA,NA,NA,NA,NA,NA),
   VLT=list(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
            NA,NA,NA,NA,y~dow+sin+cos,y~dow+sin+cos)
 )
@@ -259,12 +259,3 @@ sp.weekly.ewma.thresholds <- list(
 )
 
 
-eliminate.swedish <- function(x){
-  x<- str_replace(x,"Ö","O")
-  x<- str_replace(x,"Ä","A")
-  x<- str_replace(x,"Å","A")
-  x<- str_replace(x,"ö","o")
-  x<- str_replace(x,"ä","a")
-  x<- str_replace(x,"å","a")
-  return(y)
-}

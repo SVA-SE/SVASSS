@@ -10,7 +10,6 @@ library(bindrcpp)
 #library(shinyjs)
 
 
-
 # function to be able to decide the number of plots reactively
 #in this case barplots for svaga
 get_plot_output_list <- function(max_plots, barplot.data, weeks, weeks.to.plot) {
@@ -65,21 +64,12 @@ get_plot_output_list <- function(max_plots, barplot.data, weeks, weeks.to.plot) 
 }
 
 
-fix.encoding <- function(df, originalEncoding = "UTF-8") {
-  numCols <- ncol(df)
-  df <- data.frame(df)
-  for (col in 1:numCols)
-  {
-    if(class(df[, col]) == "character"){
-      Encoding(df[, col]) <- originalEncoding
-    }
-    
-    if(class(df[, col]) == "factor"){
-      Encoding(levels(df[, col])) <- originalEncoding
-    }
-  }
-  return(as_data_frame(df))
-}
+# load_data <- function() {
+#   Sys.sleep(2)
+#   hide("loading_page")
+#   show("main_content")
+# }
+
 
 
 shinyServer(function(input, output, session) {
@@ -94,6 +84,9 @@ shinyServer(function(input, output, session) {
   
   
   
+  
+  
+  
   for(species in species.acronyms){
     eval(parse(text=paste0("load('",shiny.history,species,".RData')")))
   }
@@ -103,7 +96,7 @@ shinyServer(function(input, output, session) {
     names(synd.list) <- sp.syndromes[[x]]
     return(synd.list)
   })
- 
+  
   weekly.object <- list(CAT=CAT.weekly,
                         BOV=BOV.weekly,
                         DOG=DOG.weekly,
@@ -130,16 +123,16 @@ shinyServer(function(input, output, session) {
   
   
   
-    #select syndromes checkboxes ----
+  #select syndromes checkboxes ----
   
-    output$syndromes <- renderUI({
-      input$species
-      radioButtons("syndromes", "Select syndromes", 
-                                               choices = sp.syndromes.names[[as.numeric(input$species)]],
-                                               selected = 1     )
-      
+  output$syndromes <- renderUI({
+    input$species
+    radioButtons("syndromes", "Select syndromes", 
+                 choices = sp.syndromes.names[[as.numeric(input$species)]],
+                 selected = 1     )
+    
   })
-
+  
   
   # renderPlot for syndromic data ----
   
@@ -158,7 +151,7 @@ shinyServer(function(input, output, session) {
   #        limit=3
   #   )
   # })
-    
+  
   
   
   output$plot.alarms.svala <- renderPlotly({
@@ -238,10 +231,10 @@ shinyServer(function(input, output, session) {
     
     
   })
-    
+  
   
   # species summary ----
-    
+  
   output$species.summary  <- renderPlot({
     barplot(rep(1,length(status.true)),
             xlim=c(0,1),
@@ -295,17 +288,17 @@ shinyServer(function(input, output, session) {
   
   output$week.table <- renderUI({
     selectInput("week.table",
-              "Week:",
-              c("All",
-                rev(week.options)))
+                "Week:",
+                c("All",
+                  rev(week.options)))
   })
   
   
   output$pavisad.table <- renderUI({
     selectInput("pavisad.table",
-              "Påvisad:",
-              c("All",
-                pavisad.options))
+                "Påvisad:",
+                c("All",
+                  pavisad.options))
   })
   
   
@@ -328,104 +321,100 @@ shinyServer(function(input, output, session) {
   
   
   #observeEvent(input$table.go, {
+  
+  #isolate(
+  #    if (input$svaga.go==1){
+  #   load(paste0(shiny.history,"/display.data.Rdata"))
+  #    }
+  #   )
+  
+  display.data.r <- reactive({
+    req(input$table.go)
+    load(paste0(shiny.history,"/display.data.Rdata"))
+    display.data[(display.data$SPECIES == species.original[as.numeric(input$species)])&
+                   (display.data$SYNDROMIC == sp.colnames[[as.numeric(input$species)]][as.numeric(input$syndromes)]) ,]
+  })
+  
+  
+  
+  output$table <- DT::renderDataTable(DT::datatable(rownames= FALSE,{
+    req(input$table.go)
+    Sys.sleep(5)
+    data <- display.data.r()
+    if (input$week.table != "All") {
+      data <- data[data$week == input$week.table,]
+    }
+    if (input$pavisad.table != "All") {
+      data <- data[data$PÅVISAD == input$pavisad.table,]
+    }
     
-    #isolate(
-    #    if (input$svaga.go==1){
-     #   load(paste0(shiny.history,"/display.data.Rdata"))
-    #    }
-     #   )
-      
-    display.data.r <- reactive({
-      req(input$table.go)
-      load(paste0(shiny.history,"/display.data.Rdata"))
-      
-      fix.encoding(display.data)
-      
-      
-      display.data[(display.data$SPECIES == species.original[as.numeric(input$species)])&
-                    (display.data$SYNDROMIC == sp.colnames[[as.numeric(input$species)]][as.numeric(input$syndromes)]) ,]
-    })
-    
-    
-    
-    output$table <- DT::renderDataTable(DT::datatable(rownames= FALSE,{
-      req(input$table.go)
-      Sys.sleep(5)
-     data <- display.data.r()
-     if (input$week.table != "All") {
-       data <- data[data$week == input$week.table,]
-     }
-     if (input$pavisad.table != "All") {
-       data <- data[data$PAVISAD == input$pavisad.table,]
-     }
-
-          data[,input$columns.table, drop = FALSE]
-   }#, options=list(
-    # initComplete = JS(
-    #   "function(settings, json) {",
-    #   "$(this.api().table().header()).css({'font-size': '80%'});",
-    #   "}"))
-   )
-   %>%
+    data[,input$columns.table, drop = FALSE]
+  }#, options=list(
+  # initComplete = JS(
+  #   "function(settings, json) {",
+  #   "$(this.api().table().header()).css({'font-size': '80%'});",
+  #   "}"))
+  )
+  %>%
     DT::formatStyle(columns = input$columns.table, fontSize = '80%')
-   )#%>% withSpinner()
+  )#%>% withSpinner()
   
-    #})
+  #})
   
- 
+  
   
   # svaga ----
-   
-   #figure out which dataset is counting
-   svaga.dataset <- reactive({
-     svaga.object[[as.numeric(input$species)]][[
-       sp.colnames[[as.numeric(input$species)]][as.numeric(input$syndromes)]]]
-   })
-   
-   
-   
-   observeEvent(input$svaga.go, {
-     output$svaga.plots <- renderUI({ get_plot_output_list(dim(svaga.dataset())[2], 
-                                                           svaga.dataset(),
-                                                           ISOweek2date(weekly.object[[as.numeric(input$species)]]@dates[,1]),
-                                                           input$svaga.weeks.slider
-                                                           ) })
-   })
-   
-   
-   
-   
-   # # Insert the right number of plot output objects into the web page
-   #  output$svaga.plots <- renderUI({
-   #   plot_output_list <- lapply(1:(dim(svaga.dataset())[2]), function(i) {
-   #     plotname <- paste("plot", i, sep="")
-   #     plotOutput(plotname, height = 280, width = 250)
-   #   })
-   # 
-   #   # Convert the list to a tagList - this is necessary for the list of items
-   #   # to display properly.
-   #   do.call(tagList, plot_output_list)
-   # })
-   # 
-   # 
-   # for (i in 1:(dim(svaga.dataset())[2])) {
-   #   # Need local so that each item gets its own number. Without it, the value
-   #   # of i in the renderPlot() will be the same across all instances, because
-   #   # of when the expression is evaluated.
-   #   local({
-   #     my_i <- i
-   #     plotname <- paste("plot", my_i, sep="")
-   # 
-   #     output[[plotname]] <- renderPlot({
-   #       barplot(t(svaga.dataset()[,i,]))
-   # 
-   # 
-   #     })
-   #   })
-   # }
-
-
-   
+  
+  #figure out which dataset is counting
+  svaga.dataset <- reactive({
+    svaga.object[[as.numeric(input$species)]][[
+      sp.colnames[[as.numeric(input$species)]][as.numeric(input$syndromes)]]]
+  })
+  
+  
+  
+  observeEvent(input$svaga.go, {
+    output$svaga.plots <- renderUI({ get_plot_output_list(dim(svaga.dataset())[2], 
+                                                          svaga.dataset(),
+                                                          ISOweek2date(weekly.object[[as.numeric(input$species)]]@dates[,1]),
+                                                          input$svaga.weeks.slider
+    ) })
+  })
+  
+  
+  
+  
+  # # Insert the right number of plot output objects into the web page
+  #  output$svaga.plots <- renderUI({
+  #   plot_output_list <- lapply(1:(dim(svaga.dataset())[2]), function(i) {
+  #     plotname <- paste("plot", i, sep="")
+  #     plotOutput(plotname, height = 280, width = 250)
+  #   })
+  # 
+  #   # Convert the list to a tagList - this is necessary for the list of items
+  #   # to display properly.
+  #   do.call(tagList, plot_output_list)
+  # })
+  # 
+  # 
+  # for (i in 1:(dim(svaga.dataset())[2])) {
+  #   # Need local so that each item gets its own number. Without it, the value
+  #   # of i in the renderPlot() will be the same across all instances, because
+  #   # of when the expression is evaluated.
+  #   local({
+  #     my_i <- i
+  #     plotname <- paste("plot", my_i, sep="")
+  # 
+  #     output[[plotname]] <- renderPlot({
+  #       barplot(t(svaga.dataset()[,i,]))
+  # 
+  # 
+  #     })
+  #   })
+  # }
+  
+  
+  
   
   # code to make links between tabs ----
   

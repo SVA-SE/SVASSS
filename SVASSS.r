@@ -49,8 +49,8 @@ source("Definitions.r",local=TRUE,encoding="native.enc")
 # new data in ----
 
 current.SVA.data  <- read.csv(paste0(wd.sourcefiles,"classified_data_SVA.csv"), as.is=TRUE, header=T, sep=";")
-  source("SVA.data_classification_fixes.r",local=TRUE,encoding="native.enc")
-  current.SVA.data <- current.SVA.data[which(current.SVA.data$active2==0),]
+source("SVA.data_classification_fixes.r",local=TRUE,encoding="native.enc")
+current.SVA.data <- current.SVA.data[which(current.SVA.data$active2==0),]
 
 #current.CDB.data  <- read.csv(paste0(wd.sourcefiles,"classified_data_CDB.csv"), as.is=TRUE, header=T, sep=";")
 #current.SJV.data  <- read.csv2(paste0(wd.sourcefiles,"classified_data_SJV.csv"))
@@ -60,184 +60,182 @@ PPN.database$X <- as.numeric(PPN.database$X)
 PPN.database$Y <- as.numeric(PPN.database$Y)
 
 load(paste0(wd.history,"classified.species.data.RData"))
-    
+
 # historical data in ----
-    
-    for(species in species.acronyms){
-      eval(parse(text=paste0("load('",wd.history,species,".RData')")))
-    }
-    
-    daily.object <- list(CAT=CAT.daily,
-                         BOV=BOV.daily,
-                         DOG=DOG.daily,
-                         ENV=ENV.daily,
-                         FOD=FOD.daily,
-                         FSK=FSK.daily,
-                         EQU=EQU.daily,
-                         AVI=AVI.daily,
-                         SRU=SRU.daily,
-                         SWI=SWI.daily,
-                         VLT=VLT.daily)
-    
-    
-    weekly.object <- list(CAT=CAT.weekly,
-                         BOV=BOV.weekly,
-                         DOG=DOG.weekly,
-                         ENV=ENV.weekly,
-                         FOD=FOD.weekly,
-                         FSK=FSK.weekly,
-                         EQU=EQU.weekly,
-                         AVI=AVI.weekly,
-                         SRU=SRU.weekly,
-                         SWI=SWI.weekly,
-                         VLT=VLT.weekly)
-    
-    svaga.object <- list(CAT=CAT.svaga,
-                         BOV=BOV.svaga,
-                         DOG=DOG.svaga,
-                         ENV=ENV.svaga,
-                         FOD=FOD.svaga,
-                         FSK=FSK.svaga,
-                         EQU=EQU.svaga,
-                         AVI=AVI.svaga,
-                         SRU=SRU.svaga,
-                         SWI=SWI.svaga,
-                         VLT=VLT.svaga)
-    
-    # removed 2018-10-08 - already saving all classified data, which is basically what this is.
-    # non.svaga.object <- list(CAT=CAT.non.svaga,
-    #                       BOV=BOV.non.svaga,
-    #                       DOG=DOG.non.svaga,
-    #                       ENV=ENV.non.svaga,
-    #                       FOD=FOD.non.svaga,
-    #                       FSK=FSK.non.svaga,
-    #                       EQU=EQU.non.svaga,
-    #                       AVI=AVI.non.svaga,
-    #                       SRU=SRU.non.svaga,
-    #                       SWI=SWI.non.svaga,
-    #                       VLT=VLT.non.svaga)
+
+for(species in species.acronyms){
+  eval(parse(text=paste0("load('",wd.history,species,".RData')")))
+}
+
+daily.object <- list(CAT=CAT.daily,
+                     BOV=BOV.daily,
+                     DOG=DOG.daily,
+                     ENV=ENV.daily,
+                     FOD=FOD.daily,
+                     FSK=FSK.daily,
+                     EQU=EQU.daily,
+                     AVI=AVI.daily,
+                     SRU=SRU.daily,
+                     SWI=SWI.daily,
+                     VLT=VLT.daily)
+
+
+weekly.object <- list(CAT=CAT.weekly,
+                      BOV=BOV.weekly,
+                      DOG=DOG.weekly,
+                      ENV=ENV.weekly,
+                      FOD=FOD.weekly,
+                      FSK=FSK.weekly,
+                      EQU=EQU.weekly,
+                      AVI=AVI.weekly,
+                      SRU=SRU.weekly,
+                      SWI=SWI.weekly,
+                      VLT=VLT.weekly)
+
+svaga.object <- list(CAT=CAT.svaga,
+                     BOV=BOV.svaga,
+                     DOG=DOG.svaga,
+                     ENV=ENV.svaga,
+                     FOD=FOD.svaga,
+                     FSK=FSK.svaga,
+                     EQU=EQU.svaga,
+                     AVI=AVI.svaga,
+                     SRU=SRU.svaga,
+                     SWI=SWI.svaga,
+                     VLT=VLT.svaga)
+
+# removed 2018-10-08 - already saving all classified data, which is basically what this is.
+# non.svaga.object <- list(CAT=CAT.non.svaga,
+#                       BOV=BOV.non.svaga,
+#                       DOG=DOG.non.svaga,
+#                       ENV=ENV.non.svaga,
+#                       FOD=FOD.non.svaga,
+#                       FSK=FSK.non.svaga,
+#                       EQU=EQU.non.svaga,
+#                       AVI=AVI.non.svaga,
+#                       SRU=SRU.non.svaga,
+#                       SWI=SWI.non.svaga,
+#                       VLT=VLT.non.svaga)
 
 
 # define border between historical and new data ----
-    
-    new.data.start <- min(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))  
-    new.data.end   <- max(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))
-    next.monday <- nextweekday(new.data.start,2)
-    
-    #make sure the new data always starts on a Monday so that it has full weeks:
-    current.SVA.data <- current.SVA.data[as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y")>=next.monday,]
-    new.data.start <- next.monday  
-    
-    last.historical.row.5days <- (which(BOV.daily@dates[,1]==new.data.start)-1)
-    last.historical.row.week  <- (which(as.character(BOV.weekly@dates[,1])==as.character(date2ISOweek(new.data.start)))-1)
-    
-    today <- strptime(as.character(new.data.end), format = "%Y-%m-%d")
-    
-    #on 2018-05-23 SVASSS was converted to WEEKLY only and always
-    #daily analysis are still ran and recorded, so that we can always revert,
-    #but they generate no emails or html output
-              weekly <- TRUE
-              #weekly <- FALSE
-              #if(today$wday==5|PlotDaily==1)(weekly<-TRUE)
-    
-    
-              
-    
-# create alarm objects ----
-    
-    true.alarms.daily <- list(
-      CAT=NA,
-      BOV=NA,
-      DOG=NA,
-      ENV=NA,
-      FOD=NA,
-      FSK=NA,
-      EQU=NA,
-      AVI=NA,
-      SRU=NA,
-      SWI=NA,
-      VLT=NA
-    )
-    
-    scnd.alarms.daily  <- true.alarms.daily
-    true.alarms.weekly <- true.alarms.daily
-    scnd.alarms.weekly <- true.alarms.daily
-    
-    
-# species loops ----
-    source("BOV.r",local=TRUE,encoding="native.enc")
-    source("AVI.r",local=TRUE,encoding="native.enc")
-    source("CAT.r",local=TRUE,encoding="native.enc")
-    source("EQU.r",local=TRUE,encoding="native.enc")
-    source("DOG.r",local=TRUE,encoding="native.enc")
-    source("SWI.r",local=TRUE,encoding="native.enc")
-    source("SRU.r",local=TRUE,encoding="native.enc")
-    source("VLT.r",local=TRUE,encoding="native.enc")
-    source("ENV.r",local=TRUE,encoding="native.enc")
-    source("FOD.r",local=TRUE,encoding="native.enc")
-    source("FSK.r",local=TRUE,encoding="native.enc")
-    
-       
-# saving data for apps ----
- # load(paste0(wd.sourcefiles,"svala.data.RData"))
- # #svala.data.dates
- # #current.data.dates
- # #min.date.current
- # #max.data.current
- # 
- # keep.svala <- which((svala.data.dates<min(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y")))&(svala.data.dates>(max(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))-550)))
- #  svala.data <- rbind(svala.data[keep.svala,],
- #                      current.SVA.data)
- # svala.data.dates <- as.Date(svala.data$ANKOMSTDATUM, format = "%d/%m/%Y", origin="01/01/1970")
- #  save(svala.data,svala.data.dates,file=paste0(wd.sourcefiles,"/svala.data.RData"))
- # 
- 
-#on 2018-08-09 substituted by saving data after processing within each species. 
-    classified.species.data <- classified.species.data[
-      as.Date(classified.species.data$ANKOMSTDATUM,format="%d/%m/%Y")>(max(
-        as.Date(classified.species.data$ANKOMSTDATUM,format="%d/%m/%Y"))-366),]
-    
-    display.data <- classified.species.data[,c("UPPDRAG","ANKOMSTDATUM","ÖVERORDNATUPPDRAG","ÖVERORDNADEUPPDRAG","PROVTAGNINGSORSAK","INSÄNTMATERIAL",
-                                               "DJURSLAG","DIAGNOSER","RESULTATUNDERSÖKNING","RESULTATANALYS",
-                                               "AGENS","PÅVISAD","ANALYSBESKRIVNING","ANALYSMATERIAL","UNDERSÖKNINGBESKRIVNING","MATERIAL",
-                                               "PPN_original","CITY","SYNDROMIC","SPECIES")]
-    
-    week <- date2ISOweek(as.Date(display.data$ANKOMSTDATUM,format="%d/%m/%Y"))
-    week <- substr(week,1,8)
-    display.data <- cbind(display.data,week)
-    
-    display.data$PÅVISAD[display.data$PÅVISAD==""]<-"_No SVAGA information"
-    
-    
-    columns.display.data <- eliminate.swedish(colnames(display.data))
-    colnames(display.data) <- columns.display.data
-  
-    week.options <- unique(as.character(display.data$week))
-    pavisad.options <- unique(as.character(display.data$PAVISAD))
-    save(columns.display.data,week.options,pavisad.options,file=paste0(wd.history,"/menu.summaries.RData"))
-    save(classified.species.data,file=paste0(wd.history,"/classified.species.data.RData"))
-    save(display.data,file=paste0(wd.history,"/display.data.RData"))
-    
-    
-  
-  # emails ----    
 
-  #on 2018-05-23 SVASSS was converted to WEEKLY only and always
-  #daily analysis are still ran and recorded, so that we can always revert,
-  #but they generate no emails or html output
-  
-          # status.true <- sapply(true.alarms.daily,sum,na.rm=TRUE)
-          #   status.scnd <- sapply(scnd.alarms.daily,sum,na.rm=TRUE)
-          #   
-          #   if(weekly){
-          #     status.true <- status.true + sapply(true.alarms.weekly,sum,na.rm=TRUE)
-          #     status.scnd <- status.scnd + sapply(scnd.alarms.weekly,sum,na.rm=TRUE)
-          #   }
-                 status.true <- sapply(true.alarms.weekly,sum,na.rm=TRUE)
-                 status.scnd <- sapply(scnd.alarms.weekly,sum,na.rm=TRUE)
-                 save(status.true,status.scnd,file=paste0(wd.history,"/status.RData"))
-                 
-  
+new.data.start <- min(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))  
+new.data.end   <- max(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))
+next.monday <- nextweekday(new.data.start,2)
+
+#make sure the new data always starts on a Monday so that it has full weeks:
+current.SVA.data <- current.SVA.data[as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y")>=next.monday,]
+new.data.start <- next.monday  
+
+last.historical.row.5days <- (which(BOV.daily@dates[,1]==new.data.start)-1)
+last.historical.row.week  <- (which(as.character(BOV.weekly@dates[,1])==as.character(date2ISOweek(new.data.start)))-1)
+
+today <- strptime(as.character(new.data.end), format = "%Y-%m-%d")
+
+#on 2018-05-23 SVASSS was converted to WEEKLY only and always
+#daily analysis are still ran and recorded, so that we can always revert,
+#but they generate no emails or html output
+weekly <- TRUE
+#weekly <- FALSE
+#if(today$wday==5|PlotDaily==1)(weekly<-TRUE)
+
+
+
+
+# create alarm objects ----
+
+true.alarms.daily <- list(
+  CAT=NA,
+  BOV=NA,
+  DOG=NA,
+  ENV=NA,
+  FOD=NA,
+  FSK=NA,
+  EQU=NA,
+  AVI=NA,
+  SRU=NA,
+  SWI=NA,
+  VLT=NA
+)
+
+scnd.alarms.daily  <- true.alarms.daily
+true.alarms.weekly <- true.alarms.daily
+scnd.alarms.weekly <- true.alarms.daily
+
+
+# species loops ----
+source("BOV.r",local=TRUE,encoding="native.enc")
+source("AVI.r",local=TRUE,encoding="native.enc")
+source("CAT.r",local=TRUE,encoding="native.enc")
+source("EQU.r",local=TRUE,encoding="native.enc")
+source("DOG.r",local=TRUE,encoding="native.enc")
+source("SWI.r",local=TRUE,encoding="native.enc")
+source("SRU.r",local=TRUE,encoding="native.enc")
+source("VLT.r",local=TRUE,encoding="native.enc")
+source("ENV.r",local=TRUE,encoding="native.enc")
+source("FOD.r",local=TRUE,encoding="native.enc")
+source("FSK.r",local=TRUE,encoding="native.enc")
+
+
+# saving data for apps ----
+# load(paste0(wd.sourcefiles,"svala.data.RData"))
+# #svala.data.dates
+# #current.data.dates
+# #min.date.current
+# #max.data.current
+# 
+# keep.svala <- which((svala.data.dates<min(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y")))&(svala.data.dates>(max(as.Date(current.SVA.data$ANKOMSTDATUM,format="%d/%m/%Y"))-550)))
+#  svala.data <- rbind(svala.data[keep.svala,],
+#                      current.SVA.data)
+# svala.data.dates <- as.Date(svala.data$ANKOMSTDATUM, format = "%d/%m/%Y", origin="01/01/1970")
+#  save(svala.data,svala.data.dates,file=paste0(wd.sourcefiles,"/svala.data.RData"))
+# 
+
+#on 2018-08-09 substituted by saving data after processing within each species. 
+classified.species.data <- classified.species.data[
+  as.Date(classified.species.data$ANKOMSTDATUM,format="%d/%m/%Y")>(max(
+    as.Date(classified.species.data$ANKOMSTDATUM,format="%d/%m/%Y"))-366),]
+
+display.data <- classified.species.data[,c("UPPDRAG","ANKOMSTDATUM","ÖVERORDNATUPPDRAG","ÖVERORDNADEUPPDRAG","PROVTAGNINGSORSAK","INSÄNTMATERIAL",
+                                           "DJURSLAG","DIAGNOSER","RESULTATUNDERSÖKNING","RESULTATANALYS",
+                                           "AGENS","PÅVISAD","ANALYSBESKRIVNING","ANALYSMATERIAL","UNDERSÖKNINGBESKRIVNING","MATERIAL",
+                                           "PPN_original","CITY","SYNDROMIC","SPECIES")]
+
+week <- date2ISOweek(as.Date(display.data$ANKOMSTDATUM,format="%d/%m/%Y"))
+week <- substr(week,1,8)
+display.data <- cbind(display.data,week)
+
+display.data$PÅVISAD[display.data$PÅVISAD==""]<-"_No SVAGA information"
+
+
+columns.display.data <- colnames(display.data)
+week.options <- unique(as.character(display.data$week))
+pavisad.options <- unique(as.character(display.data$PÅVISAD))
+save(columns.display.data,week.options,pavisad.options,file=paste0(wd.history,"/menu.summaries.RData"))
+save(classified.species.data,file=paste0(wd.history,"/classified.species.data.RData"))
+save(display.data,file=paste0(wd.history,"/display.data.RData"))
+
+
+
+# emails ----    
+
+#on 2018-05-23 SVASSS was converted to WEEKLY only and always
+#daily analysis are still ran and recorded, so that we can always revert,
+#but they generate no emails or html output
+
+# status.true <- sapply(true.alarms.daily,sum,na.rm=TRUE)
+#   status.scnd <- sapply(scnd.alarms.daily,sum,na.rm=TRUE)
+#   
+#   if(weekly){
+#     status.true <- status.true + sapply(true.alarms.weekly,sum,na.rm=TRUE)
+#     status.scnd <- status.scnd + sapply(scnd.alarms.weekly,sum,na.rm=TRUE)
+#   }
+status.true <- sapply(true.alarms.weekly,sum,na.rm=TRUE)
+status.scnd <- sapply(scnd.alarms.weekly,sum,na.rm=TRUE)
+save(status.true,status.scnd,file=paste0(wd.history,"/status.RData"))
+
+
 body <- list("please visit <http://ubuntu1:3838/sample-apps/SVASSS/>")
 
 
@@ -267,7 +265,7 @@ if (sum(status.true,na.rm=TRUE)==0&sum(status.scnd,na.rm=TRUE)==0)({
   to <- "<fernanda.dorea@sva.se>"
   subject <- paste((Sys.Date()-1),"calculations finished",sep=",")
   msg="No alarms today"
-   sendmail(from, to, subject,msg, control=list(smtpServer="smtp1.sva.se"))
+  sendmail(from, to, subject,msg, control=list(smtpServer="smtp1.sva.se"))
 })
 
 
