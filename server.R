@@ -342,10 +342,10 @@ shinyServer(function(input, output, session) {
     Sys.sleep(5)
     data <- display.data.r()
     if (input$week.table != "All") {
-      data <- data[data$week == rev(week.options)[as.numeric(input$week.table)],]
+      data <- data[data$week == input$week.table,]
     }
     if (input$pavisad.table != "All") {
-      data <- data[data$PAVISAD == pavisad.options[as.numeric(input$pavisad.table)],]
+      data <- data[data$PAVISAD == input$pavisad.table,]
     }
     
     data[,input$columns.table, drop = FALSE]
