@@ -206,12 +206,15 @@ week <- date2ISOweek(as.Date(display.data$ANKOMSTDATUM,format="%d/%m/%Y"))
 week <- substr(week,1,8)
 display.data <- cbind(display.data,week)
 
-display.data$PÅVISAD[display.data$PÅVISAD==""]<-"_No SVAGA information"
+columns.display.data <- eliminate.swedish.the.wrong.way(colnames(display.data))
+colnames(display.data) <- columns.display.data
 
 
-columns.display.data <- colnames(display.data)
+display.data$PAVISAD[display.data$PAVISAD==""]<-"_No SVAGA information"
+
+
 week.options <- unique(as.character(display.data$week))
-pavisad.options <- unique(as.character(display.data$PÅVISAD))
+pavisad.options <- unique(as.character(display.data$PAVISAD))
 save(columns.display.data,week.options,pavisad.options,file=paste0(wd.history,"/menu.summaries.RData"))
 save(classified.species.data,file=paste0(wd.history,"/classified.species.data.RData"))
 save(display.data,file=paste0(wd.history,"/display.data.RData"))
