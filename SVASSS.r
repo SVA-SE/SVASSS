@@ -209,15 +209,11 @@ load(paste0(wd.history,"classified.species.data.RData"))
     display.data$PÅVISAD[display.data$PÅVISAD==""]<-"_No SVAGA information"
     
     
-    columns.display.data <- colnames(display.data)
-    columns.display.data <- str_replace(columns.display.data,"Ö","O")
-    columns.display.data <- str_replace(columns.display.data,"Ä","A")
-    columns.display.data <- str_replace(columns.display.data,"Å","A")
-    
+    columns.display.data <- eliminate.swedish(colnames(display.data))
     colnames(display.data) <- columns.display.data
   
     week.options <- unique(as.character(display.data$week))
-    pavisad.options <- unique(as.character(display.data$PÅVISAD))
+    pavisad.options <- unique(as.character(display.data$PAVISAD))
     save(columns.display.data,week.options,pavisad.options,file=paste0(wd.history,"/menu.summaries.RData"))
     save(classified.species.data,file=paste0(wd.history,"/classified.species.data.RData"))
     save(display.data,file=paste0(wd.history,"/display.data.RData"))
