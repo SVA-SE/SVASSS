@@ -163,24 +163,24 @@ for (ewma.loop in 1:2){
 # shew ----
 #run shew for all, and never correct baseline
 
-if(!is.na(sp.daily.ewma.thresholds[[sp.position]][1])){
-  
-daily.object[[sp.position]] <- shew_synd(x=daily.object[[sp.position]],
-                                         syndromes=NULL,
-                                         evaluate.window=daily.evaluate.window,
-                                         baseline.window=baseline.window,
-                                         limit.sd=shew.limits,
-                                         guard.band=guard.band,
-                                         correct.baseline=FALSE,
-                                         alarm.dim=3,
-                                         UCL=3,
-                                         LCL=FALSE,
-                                         pre.process=sp.pre.process.daily[[sp.position]],
-                                         diff.window=NULL,
-                                         family="poisson",
-                                         formula=sp.daily.formulas[[sp.position]],
-                                         frequency=260)
-}
+# if(!is.na(sp.daily.ewma.thresholds[[sp.position]][1])){
+#   
+# daily.object[[sp.position]] <- shew_synd(x=daily.object[[sp.position]],
+#                                          syndromes=NULL,
+#                                          evaluate.window=daily.evaluate.window,
+#                                          baseline.window=baseline.window,
+#                                          limit.sd=shew.limits,
+#                                          guard.band=guard.band,
+#                                          correct.baseline=FALSE,
+#                                          alarm.dim=3,
+#                                          UCL=3,
+#                                          LCL=FALSE,
+#                                          pre.process=sp.pre.process.daily[[sp.position]],
+#                                          diff.window=NULL,
+#                                          family="poisson",
+#                                          formula=sp.daily.formulas[[sp.position]],
+#                                          frequency=260)
+# }
 
 if(weekly){
   weekly.object[[sp.position]] <- shew_synd(x=weekly.object[[sp.position]],
