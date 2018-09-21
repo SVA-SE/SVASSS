@@ -286,20 +286,20 @@ shinyServer(function(input, output, session) {
   
   
   
-  output$week.table <- renderUI({
-    selectInput("week.table",
-                "Week:",
-                c("All",
-                  rev(week.options)))
-  })
-  
-  
-  output$pavisad.table <- renderUI({
-    selectInput("pavisad.table",
-                "Påvisad:",
-                c("All",
-                  pavisad.options))
-  })
+  # output$week.table <- renderUI({
+  #   selectInput("week.table",
+  #               "Week:",
+  #               c("All",
+  #                 rev(week.options)))
+  # })
+  # 
+  # 
+  # output$pavisad.table <- renderUI({
+  #   selectInput("pavisad.table",
+  #               "Påvisad:",
+  #               c("All",
+  #                 pavisad.options))
+  # })
   
   
   # observeEvent({
@@ -330,23 +330,32 @@ shinyServer(function(input, output, session) {
   
   display.data.r <- reactive({
     req(input$table.go)
+    
     load(paste0(shiny.history,"/display.data.Rdata"))
-    display.data[(display.data$SPECIES == species.original[as.numeric(input$species)])&
+    display.data <- display.data[(display.data$SPECIES == species.original[as.numeric(input$species)])&
                    (display.data$SYNDROMIC == sp.colnames[[as.numeric(input$species)]][as.numeric(input$syndromes)]) ,]
-  })
+    if (input$week.table != "All") {
+      display.data <- display.data[(display.data$week == input$week.table),]
+    }
+    if (input$pavisad.table != "All") {
+      #display.data <- display.data[(display.data$PAVISAD == pavisad.options[as.numeric(input$pavisad.table)]),]
+      display.data <- display.data[(display.data$PAVISAD == input$pavisad.table),]
+    }
+    return(display.data)
+     })
   
   
   
   output$table <- DT::renderDataTable(DT::datatable(rownames= FALSE,{
     req(input$table.go)
-    Sys.sleep(5)
+    #Sys.sleep(5)
     data <- display.data.r()
-    if (input$week.table != "All") {
-      data <- data[data$week == rev(week.options)[as.numeric(input$week.table)],]
-    }
-    if (input$pavisad.table != "All") {
-      data <- data[data$PAVISAD == pavisad.options[as.numeric(input$pavisad.table)],]
-    }
+    # if (input$week.table != "All") {
+    #   data <- data[data$week == rev(week.options)[as.numeric(input$week.table)],]
+    # }
+    # if (input$pavisad.table != "All") {
+    #   data <- data[data$PAVISAD == pavisad.options[as.numeric(input$pavisad.table)],]
+    # }
     
     data[,input$columns.table, drop = FALSE]
   }#, options=list(

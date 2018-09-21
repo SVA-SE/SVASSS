@@ -139,8 +139,15 @@ shinyUI(navbarPage(
                          tabPanel("Data", value ="#panel_data",
                                   #row 1 = select data
                                   fluidRow(
-                                    column(4, uiOutput("week.table")),
-                                    column(4, uiOutput("pavisad.table"))
+                                    column(4, selectInput("week.table",
+                                                          "Week:",
+                                                          c("All",
+                                                            rev(week.options)))),
+                                    column(4, selectInput("pavisad.table",
+                                                          "Påvisad:",
+                                                          c("All",
+                                                            pavisad.options)))
+                                    
                                   ),
                                   
                                   #row 2 = select columns
