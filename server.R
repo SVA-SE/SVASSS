@@ -77,7 +77,7 @@ shinyServer(function(input, output, session) {
   # load_data()
   
   #data imported from outside ----
-  source("Definitions.r",local=TRUE,encoding="native.enc")
+  source("Definitions.r",local=TRUE,encoding="latin1")
   
   load(paste0(shiny.history,"/status.RData"))
   load(paste0(shiny.history,"/menu.summaries.RData"))

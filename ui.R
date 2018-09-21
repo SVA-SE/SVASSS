@@ -9,7 +9,7 @@ require(shinycssloaders)
 #library(shinyjs)
 
 
-source("Definitions.r",local=TRUE,encoding="native.enc")
+source("Definitions.r",local=TRUE,encoding="latin1")
 load(paste0(shiny.history,"/menu.summaries.RData"))
 
 shinyUI(navbarPage(
