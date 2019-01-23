@@ -16,7 +16,7 @@ if(dim(dd)[1]>0)(dd$SYNDROMIC <-  "Doddes")
   
   CD.species <- rbind(CD.species,am,dd)
 
-  classified.species.data <- rbind(classified.species.data,CD.species)
+  classified.species.data <- bind_rows(classified.species.data,CD.species)
   
   # running vetsyn-based-engine ----
   #(running the codes that are the same for every syndromic object, namely:

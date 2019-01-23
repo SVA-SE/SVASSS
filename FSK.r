@@ -14,7 +14,7 @@ CD.species$SYNDROMIC[CD.species$General=="AntimResistance"] <- "AntimResistance"
 CD.species$SYNDROMIC[(!CD.species$SYNDROMIC=="GIT")&(!CD.species$SYNDROMIC=="Systemic")
                      &(!CD.species$SYNDROMIC=="Urinary")&(!CD.species$General=="AntimResistance")] <- "Rest"
 
-classified.species.data <- rbind(classified.species.data,CD.species)
+classified.species.data <- bind_rows(classified.species.data,CD.species)
 
 # running vetsyn-based-engine ----
 #(running the codes that are the same for every syndromic object, namely:

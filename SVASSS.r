@@ -1,6 +1,6 @@
 list.of.packages <- c("gdata", "timeDate","surveillance","abind","qcc","caTools","tseries","np",
                       "fitdistrplus","pscl","sendmailR","rgdal","ggmap","mapproj","maps","stringr","ISOweek", "devtools",
-                      "lubridate")
+                      "lubridate","dplyr")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
@@ -27,6 +27,7 @@ require(ISOweek)
 require(devtools)
 require(lubridate)
 require(data.table)
+require(dplyr)
 
 rm(list.of.packages)
 rm(new.packages)

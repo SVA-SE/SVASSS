@@ -15,7 +15,7 @@ CD.species$SYNDROMIC[CD.species$General=="Bacterial"] <- "Bacterial"
 CD.species$SYNDROMIC[(!CD.species$General=="Mycotic")&(!CD.species$General=="Bacterial")] <- "Rest"
 
 
-classified.species.data <- rbind(classified.species.data,CD.species)
+classified.species.data <- bind_rows(classified.species.data,CD.species)
 
 # running vetsyn-based-engine ----
 #(running the codes that are the same for every syndromic object, namely:
