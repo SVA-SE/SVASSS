@@ -48,8 +48,8 @@ source("Definitions.r",local=TRUE,encoding="native.enc")
 
 # new data in ----
 
-current.SVA.data  <- read.csv(paste0(wd.sourcefiles,"classified_data_SVA.csv"), as.is=TRUE, header=T, sep=";")
-source("SVA.data_classification_fixes.r",local=TRUE,encoding="native.enc")
+current.SVA.data  <- read.csv(paste0(wd.sourcefiles,"classified_data_SVA.csv"), as.is=TRUE, header=T, sep=";", encoding="UTF-8")
+source("SVA.data_classification_fixes.r",local=TRUE)
 current.SVA.data <- current.SVA.data[which(current.SVA.data$active2==0),]
 
 #current.CDB.data  <- read.csv(paste0(wd.sourcefiles,"classified_data_CDB.csv"), as.is=TRUE, header=T, sep=";")

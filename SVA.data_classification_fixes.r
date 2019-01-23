@@ -1,5 +1,7 @@
 #establishing a unique identification for animals and PPN, even if that information
 #is missing in a given submission
+current.SVA.data$DJURINDIVID <- as.numeric(current.SVA.data$DJURINDIVID)
+current.SVA.data$DJURINDIVID[is.na(current.SVA.data$DJURINDIVID)]<-0
 DJURINDIVID = (current.SVA.data$DJURINDIVID+2)
 PPN = (current.SVA.data$PPN+2)
 
